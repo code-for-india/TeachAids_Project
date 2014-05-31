@@ -403,7 +403,7 @@ public class MainVideoFragment extends Fragment {
 	
 	private void showPopup(PopupWindow popUp) {
         final float scale = getActivity().getResources().getDisplayMetrics().density;
-		int width = (int) (200 * scale + 0.5f);;
+		int width = (int) (200 * scale + 0.5f);
 		ResizeWidthAnimation anim = new ResizeWidthAnimation(mQuizBar, width);
 	    anim.setDuration(500);
 	    mQuizBar.startAnimation(anim);
