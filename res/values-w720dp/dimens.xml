@@ -4,21 +4,20 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     
     <dimen name="teachAidsLogoContainer_left">140dp</dimen>
-    <dimen name="genderTeachAids_top">200dp</dimen>
-    <dimen name="genderTeachAids_left">0dp</dimen>
+    <dimen name="genderTeachAids_top">120dp</dimen>
+    <dimen name="genderTeachAids_left">140dp</dimen>
     <dimen name="genderTeachAids_right">0dp</dimen>
-    <dimen name="genderTeachAids_width">200dp</dimen>
     <dimen name="genderTeachAids_height">200dp</dimen>
-    <dimen name="genderTeachAidsUrl_top">5dp</dimen>
-    <dimen name="genderTeachAidsUrl_left">10dp</dimen>
+    <dimen name="genderTeachAidsUrl_top">-80dp</dimen>
+    <dimen name="genderTeachAidsUrl_left">150dp</dimen>
     <dimen name="genderTeachAidsUrl_bottom">20dp</dimen>
     <dimen name="genderTeachAidsUrl_right">10dp</dimen>
     <dimen name="genderTeachAidsUrl_textsize">12sp</dimen>
-    <dimen name="genderRightContainer_left">120dp</dimen>
+    <dimen name="genderRightContainer_left">150dp</dimen>
     <dimen name="genderSelectText_top">15dp</dimen>
     <dimen name="genderSelectText_bottom">10dp</dimen>
     <dimen name="genderSelectText_textsize">24sp</dimen>
-    <dimen name="gender_male_button_left">-10dip</dimen>
+    <dimen name="gender_male_button_left">-30dip</dimen>
     <dimen name="gender_male_button_bottom">5dip</dimen>
     <dimen name="gender_male_button_width">250dp</dimen>
     <dimen name="maleText_top">-5dp</dimen>

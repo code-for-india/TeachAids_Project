@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.project.TeachAids.GenderScreenFragment.Gender;
+import com.project.TeachAids.VideoListModel.QuestionPoint;
+import com.project.TeachAids.VideoListModel.VideoHolder;
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.app.Fragment;
@@ -12,6 +16,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,66 +33,61 @@ import android.widget.VideoView;
 
 @SuppressLint("ValidFragment")
 public class MainVideoFragment extends Fragment {
-	private MainActivity mParent;
-	private TextView mChapterLabel;
-	private TextView mVideoTitleLabel;
-	private View mNavBar;
-	private View mQuizBar;
-	private View mCorrectView;
-	private View mIncorrectView;
-	private VideoView mVideoView;
-	private ImageView mPlayPauseView;
+    private static final String TAG = "MainVideoFragment";
+    
+	private VideoScreenListener mParent;
 	private boolean mPlaying = false;
 	private int mCurrentVideoIndex = 0;
 	private boolean mTimerRunning = false;
 	private Timer mTimer;
 	private Handler mHandler = new Handler();
-	private PopupWindow mPopup;
 	private QuestionPoint mCurrentQp;
-	private View mYesNoParent;
-	private Button mYesButton;
-	private Button mNoButton;
-	private Button mCorrectConfirmButton;
-	private Button mIncorrectConfirmButton;
-	private TextView mQuizTextLabel;
+	private String mPath;
+	private List<VideoHolder> mVideoList;
 	
-	private final int TIMER_PERIOD = 2;
+	// controls
+	private TextView mChapterLabel;
+    private TextView mVideoTitleLabel;
+    private View mNavBar;
+    private View mQuizBar;
+    private View mCorrectView;
+    private View mIncorrectView;
+    private VideoView mVideoView;
+    private ImageView mPlayPauseView;
+    private PopupWindow mPopup;
+    private View mYesNoParent;
+    private Button mYesButton;
+    private Button mNoButton;
+    private Button mCorrectConfirmButton;
+    private Button mIncorrectConfirmButton;
+    private TextView mQuizTextLabel;
+    
+	private final int TIMER_PERIOD = 200;
 	
-	private class QuestionPoint {
-		public int stopPoint;
-		public String questionText;
-		public boolean correctAnswerIsYes;
-		public boolean seen = false;
-		
-		public QuestionPoint(int point, String qtxt, boolean ansIsYes) {
-			this.stopPoint = point;
-			this.questionText = qtxt;
-			this.correctAnswerIsYes = ansIsYes;
-		}
+	public interface VideoScreenListener {
+	    public void onMainVideoFinished();
 	}
-
-	private class VideoHolder {
-		public String title;
-		public String path;
-		public List<QuestionPoint> stopPoints = new ArrayList<QuestionPoint>();
-		
-		public VideoHolder(String t, String p) { title = t; path = p; }
-	}
-	
-	
-	ArrayList<VideoHolder> mVideoList = new ArrayList<VideoHolder>();
 	
 	public MainVideoFragment() {
-		
 	}
 
-	public MainVideoFragment(MainActivity parent) {
+	public MainVideoFragment(VideoScreenListener parent, String path) {
 		mParent = parent;
+		mPath = path;
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		initVideoList();
+	    super.onCreateView(inflater, container, savedInstanceState);
+	    
+	    mVideoList = VideoListModel.initVideoList(mPath);
+	    if (mVideoList == null || mVideoList.size() == 0) {
+	        // this really shouldn't be happening... there is not much we can do here other than bail.
+	        Log.e(TAG, "Unexpected: video list is null");
+	        UIUtils.showMessageBox(this.getActivity(), this.getResources().getString(R.string.error_title), 
+                                   this.getResources().getString(R.string.unexpected_error));
+	        return null;
+	    }
 		
 		final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 		
@@ -117,8 +117,7 @@ public class MainVideoFragment extends Fragment {
 		
 		final VideoView myVideoView = (VideoView)rootView.findViewById(R.id.myvideoview);
 		mVideoView = myVideoView;
-		myVideoView.setVideoURI(Uri.parse(mVideoList.get(mCurrentVideoIndex).path));
-		myVideoView.requestFocus();
+		myVideoView.setVideoURI(Uri.parse(mVideoList.get(mCurrentVideoIndex).getPath()));
 		myVideoView.start();
 		mPlaying = true;
 		startTimer();
@@ -129,18 +128,16 @@ public class MainVideoFragment extends Fragment {
 		final MainVideoFragment self = this;
 		
 		rootView.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 			}
-			
 		});
 		
 		mYesButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (mCurrentQp != null) {
-					if (mCurrentQp.correctAnswerIsYes) {
+					if (mCurrentQp.correctAnswerIsYes()) {
 						mQuizBar.setVisibility(View.VISIBLE);
 						mYesNoParent.setVisibility(View.GONE);
 						mCorrectView.setVisibility(View.VISIBLE);
@@ -160,7 +157,7 @@ public class MainVideoFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				if (mCurrentQp != null) {
-					if (!mCurrentQp.correctAnswerIsYes) {
+					if (!mCurrentQp.correctAnswerIsYes()) {
 						mQuizBar.setVisibility(View.VISIBLE);
 						mYesNoParent.setVisibility(View.GONE);
 						mCorrectView.setVisibility(View.VISIBLE);
@@ -206,7 +203,7 @@ public class MainVideoFragment extends Fragment {
 					}
 					setChapterLabelText();
 					setVideoTitleText();
-					myVideoView.setVideoURI(Uri.parse(mVideoList.get(mCurrentVideoIndex).path));
+					myVideoView.setVideoURI(Uri.parse(mVideoList.get(mCurrentVideoIndex).getPath()));
 					myVideoView.requestFocus();
 					myVideoView.start();
 					mPlaying = true;
@@ -228,7 +225,7 @@ public class MainVideoFragment extends Fragment {
 					else {
 						setChapterLabelText();
 						setVideoTitleText();
-						myVideoView.setVideoURI(Uri.parse(mVideoList.get(mCurrentVideoIndex).path));
+						myVideoView.setVideoURI(Uri.parse(mVideoList.get(mCurrentVideoIndex).getPath()));
 						myVideoView.requestFocus();
 						myVideoView.start();
 						mPlaying = true;
@@ -260,21 +257,20 @@ public class MainVideoFragment extends Fragment {
 			if (mPlaying) {
 				if (mVideoView != null) {
 					int currentPosition = mVideoView.getCurrentPosition();
-					currentPosition = Math.round(currentPosition / 1000);
 					if (currentPosition > 0 && (mCurrentVideoIndex < mVideoList.size())) {
 						VideoHolder currentVideoHolder = mVideoList.get(mCurrentVideoIndex);
-						if (currentVideoHolder.stopPoints != null) {
-							for (QuestionPoint qp : currentVideoHolder.stopPoints) {
-								if (!qp.seen && (Math.abs(qp.stopPoint - currentPosition) < TIMER_PERIOD)) {
+						if (currentVideoHolder.getStopPoints() != null) {
+							for (QuestionPoint qp : currentVideoHolder.getStopPoints()) {
+								if (qp.questionActive() && (Math.abs(qp.getStopPoint() - currentPosition) < TIMER_PERIOD)) {
 									stopTimer();
 									pauseVideo();
 									mCurrentQp = qp;
-									mCurrentQp.seen = true;
+									mCurrentQp.setQuestionActive(false);
 									mYesNoParent.setVisibility(View.VISIBLE);
 									mCorrectView.setVisibility(View.GONE);
 									mIncorrectView.setVisibility(View.GONE);
-									mPopup = this.createPopup(qp.questionText);
-									mQuizTextLabel.setText(qp.questionText);
+									mPopup = this.createPopup(qp.getQuestionText());
+									mQuizTextLabel.setText(qp.getQuestionText());
 									showPopup(mPopup);
 									break;
 								}
@@ -282,8 +278,7 @@ public class MainVideoFragment extends Fragment {
 						}
 					}
 				}
-			}
-			else {
+			} else {
 				stopTimer();
 			}
 		}
@@ -328,30 +323,6 @@ public class MainVideoFragment extends Fragment {
 		TextUtil.SetThinTextStyle((TextView)mIncorrectView.findViewById(R.id.incorrectLabel2), Color.parseColor("#2b2e2e"));		
 	}
 	
-	private void initVideoList() {
-		VideoHolder vh = new VideoHolder("Prevention of HIV", "android.resource://com.project.TeachAids/" + R.raw.chapter_1);
-		mVideoList.add(vh);
-		vh = new VideoHolder("How does someone get infected?", "android.resource://com.project.TeachAids/" + R.raw.chapter_6);
-		mVideoList.add(vh);
-		vh = new VideoHolder("Doctor's Challenge", "android.resource://com.project.TeachAids/" + R.raw.chapter_7i);
-		vh.stopPoints.add(new QuestionPoint(15, "Can you get HIV from someone sneezing or coughing on you?", false));
-		vh.stopPoints.add(new QuestionPoint(23, "Are Saliva and Mucus high risk fluids?", false));
-		vh.stopPoints.add(new QuestionPoint(38, "Can you get HIV from sharing a needle?", true));
-		mVideoList.add(vh);
-		vh = new VideoHolder("How do you know there is an infection?", "android.resource://com.project.TeachAids/" + R.raw.chapter_8);
-		mVideoList.add(vh);
-		vh = new VideoHolder("How do you protect yourself?", "android.resource://com.project.TeachAids/" + R.raw.chapter_9);
-		mVideoList.add(vh);
-		vh = new VideoHolder("Why is testing important?", "android.resource://com.project.TeachAids/" + R.raw.chapter_10);
-		mVideoList.add(vh);
-		vh = new VideoHolder("Hindi Chapter 1", "android.resource://com.project.TeachAids/" + R.raw.hindichap_1);
-		mVideoList.add(vh);			
-		vh = new VideoHolder("Hindi Chapter 2", "android.resource://com.project.TeachAids/" + R.raw.hindichap_2);
-		mVideoList.add(vh);			
-		vh = new VideoHolder("Hindi Chapter 3", "android.resource://com.project.TeachAids/" + R.raw.hindichap_3);
-		mVideoList.add(vh);					
-	}
-	
 	private void setChapterLabelText() {
 		String text = "Chapter " + (mCurrentVideoIndex+1) + " of " + mVideoList.size();
 		mChapterLabel.setText(text);
@@ -359,7 +330,7 @@ public class MainVideoFragment extends Fragment {
 	
 	private void setVideoTitleText() {
 		if (mCurrentVideoIndex < mVideoList.size()) {
-			mVideoTitleLabel.setText(mVideoList.get(mCurrentVideoIndex).title);
+			mVideoTitleLabel.setText(mVideoList.get(mCurrentVideoIndex).getTitle());
 		}
 	}
 	
