@@ -7,6 +7,7 @@ import java.util.TimerTask;
 
 import com.project.TeachAids.GenderScreenFragment.Gender;
 import com.project.TeachAids.LanguagePathUtils.Language;
+import com.project.TeachAids.UnzipUtil.UnzipFinishedListener;
 
 import android.app.Activity;
 import android.app.ActionBar;
@@ -36,7 +37,8 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 													  GenderScreenFragment.GenderScreenListener,
 													  MainVideoFragment.VideoScreenListener,
 													  FinalScreenFragment.FinalScreenListener,
-													  VideoDownloadManager.DownloadManagerListener {
+													  VideoDownloadManager.DownloadManagerListener,
+													  UnzipFinishedListener {
 	private static final String TAG = "MainActivity";
 	private static final int DOWNLOAD_PROGRESS_TIMER_PERIOD = 2000;
 	
@@ -51,6 +53,7 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 	private Language mCurrentLanguage;
 	private String mCurrentDownloadUri;
 	private ProgressDialog mCurrentProgressDialog;
+	private UnzipUtil mUnzipUtil;
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +87,14 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 		mCurrentLanguage = lang;
 		
 		File localPathInternal = LanguagePathUtils.getLanguagePackFolderPath(this, mCurrentLanguage);
+		File downloadPath = LanguagePathUtils.getLanguagePackDownloadPath(this, lang);
 		if (localPathInternal.exists()) {
-			// we have already downloaded this language pack. done
-			launchGenderSelectScreen();
+		    if (downloadPath.exists()) {
+		        extractLanguagePackAndLaunch(downloadPath, localPathInternal);
+		    } else {
+	            // we have already downloaded this language pack. done
+	            launchGenderSelectScreen();		        
+		    }
 		} else {
 			// we currently download all media files to the private storage directory within external storage
 			// if the external storage medium is not available, display an error.
@@ -96,19 +104,12 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 				return;
 			}
 
-			File downloadPath = LanguagePathUtils.getLanguagePackDownloadPath(this, lang);
 			mCurrentDownloadUri = LanguagePathUtils.getLanguagePackUrl(lang);
 			if (mDownloadManager.triggerDownload(mCurrentDownloadUri, downloadPath.getPath())) {
 				startDownloadProgressTimer();
 			} else {
 				if (downloadPath.exists()) {
-					if (!UnzipUtil.extractPackToFolderAndDelete(downloadPath.getPath(), localPathInternal.getPath())) {
-					    UIUtils.showMessageBox(this, this.getResources().getString(R.string.error_title), 
-	                                           this.getResources().getString(R.string.unexpected_error));
-					    return;
-					} else {
-					    launchGenderSelectScreen();
-					}
+				    extractLanguagePackAndLaunch(downloadPath, localPathInternal);
 				} else {
 					// This would not make sense as the language does not exist so a download has to be triggered.
 					Log.e(TAG, "Unexpected: download not triggered for language: " + lang);
@@ -168,12 +169,7 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 			stopDownloadProgressTimer();
 			File downloadPath = LanguagePathUtils.getLanguagePackDownloadPath(this, mCurrentLanguage);
 			if (downloadPath.exists()) {
-				if (!UnzipUtil.extractPackToFolderAndDelete(downloadPath.getPath(), 
-													        LanguagePathUtils.getLanguagePackFolderPath(this, mCurrentLanguage).getPath())) {
-				    errorOccurred = true;
-				} else {
-				    launchGenderSelectScreen();
-				}
+			    extractLanguagePackAndLaunch(downloadPath, LanguagePathUtils.getLanguagePackFolderPath(this, mCurrentLanguage));
 			} else {
 				Log.e(TAG, "File was downloaded but path does not exist locally: " + uri);
 				errorOccurred = true;
@@ -196,12 +192,27 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 		}
 	} 
 	
+    @Override
+    public void unzipFinished(boolean success) {
+        if (success) {
+            launchGenderSelectScreen();
+        } else {
+            UIUtils.showMessageBox(this, this.getResources().getString(R.string.error_title), 
+                    this.getResources().getString(R.string.unexpected_error));            
+        }
+    }
+	
 	private void launchGenderSelectScreen() {
 		FragmentTransaction ft = getFragmentManager().beginTransaction().replace(R.id.container, mGenderScreenFragment);
 		ft.addToBackStack(null);
 		ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
 		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 		ft.commit();
+	}
+	
+	private void extractLanguagePackAndLaunch(File downloadPath, File localPath) {
+	    mUnzipUtil = new UnzipUtil(this, this, downloadPath.getPath(), localPath.getPath());
+	    mUnzipUtil.execute();
 	}
 	
 	private void onDownloadProgressTimerTick() {

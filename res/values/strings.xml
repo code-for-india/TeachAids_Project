@@ -10,5 +10,6 @@
     <string name="downloading">Downloading&#8230;</string>
     <string name="oklabel">OK</string>
     <string name="externalstorage_unavailable">The external storage location is unavailable.</string>
+    <string name="unzip_progress_message">Preparing...</string>
 	
 </resources>
