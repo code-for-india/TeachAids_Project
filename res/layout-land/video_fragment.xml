@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:orientation="horizontal"
+   android:layout_height="fill_parent"
+   android:layout_width="fill_parent"
+   android:background="#2b2e2e"
+   >
+   <RelativeLayout
+       android:id="@+id/navBar"
+       android:layout_alignParentLeft="true"
+       android:background="#e6e7e8"
+       android:orientation="vertical"
+       android:layout_width="@+dimen/navBar_width"
+       android:layout_height="fill_parent"
+       >
+       
+      <TextView
+        android:id="@+id/chapterLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop = "@+dimen/navBarChapterLabel_top"
+        android:layout_marginBottom = "@+dimen/navBarChapterLabel_bottom"
+        android:gravity="center"
+        android:text="Chapter 1 of 11"
+        android:textColor="#000000"
+        android:textSize="@+dimen/navBarChapterLabel_textsize" />
+
+      <TextView
+        android:id="@+id/videoTitleLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop = "@+dimen/navBarvideoTitleLabel_top"
+        android:layout_marginBottom = "@+dimen/navBarvideoTitleLabel_bottom"
+        android:layout_below="@id/chapterLabel"
+        android:gravity="center"
+        android:text="A Doctor's Visit"
+        android:textColor="#2b2e2e"
+        android:textSize="@+dimen/navBarvideoTitleLabel_textsize" />
+      
+      <LinearLayout
+       android:orientation="horizontal"
+       android:layout_below="@id/videoTitleLabel"
+       android:layout_marginTop ="@+dimen/navBarPlayControls_top"
+       android:layout_marginLeft = "@+dimen/navBarPlayControls_left"
+       android:layout_marginRight = "@+dimen/navBarPlayControls_right"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
+          <ImageView
+            android:id="@+id/skipprev"
+            android:layout_width="@+dimen/navBarSkipButton_width"
+            android:layout_height="@+dimen/navBarSkipButton_height"
+            android:layout_marginTop ="@+dimen/navBarSkipButton_top"
+            android:src="@drawable/left_arrow"
+            />
+          <ImageView
+            android:id="@+id/playandpause"
+            android:layout_width="@+dimen/navBarPauseButton_width"
+            android:layout_height="@+dimen/navBarPauseButton_height"
+            android:layout_marginTop ="@+dimen/navBarPauseButton_top"
+            android:src="@drawable/pause"/>
+          
+          <ImageView
+            android:id="@+id/skipnext"
+            android:layout_width="@+dimen/navBarSkipButton_width"
+            android:layout_height="@+dimen/navBarSkipButton_height"
+            android:layout_marginTop ="@+dimen/navBarSkipButton_top"
+            android:src="@drawable/right_arrow"/>
+      </LinearLayout>
+      
+      <TextView
+        android:id="@+id/learnMoreTeachAids"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@+dimen/navBarTeachAidsLabel_top"
+        android:layout_marginBottom="@+dimen/navBarTeachAidsLabel_bottom"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="10dp"
+        android:text="Learn More: www.teachaids.org"
+        android:textColor="#000000"
+        android:textSize="@+dimen/navBarTeachAidsLabel_textsize" />
+            
+      <ImageView
+            android:layout_above="@+id/learnMoreTeachAids"
+            android:layout_marginTop="@+dimen/navBarTeachAidsLogo_top"
+            android:layout_marginLeft="@+dimen/navBarTeachAidsLogo_left"
+            android:layout_marginRight="@+dimen/navBarTeachAidsLogo_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/teachaidslogo" />
+      
+   </RelativeLayout>
+
+    <LinearLayout
+        android:layout_alignParentRight="true"
+        android:id="@+id/quizbar"
+        android:background="#e6e7e8"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent">
+        
+        <include
+            android:layout_marginTop="@+dimen/quizBarQuizLabel_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/yesnoparent"
+            layout="@layout/quiz_yes_no" />
+        
+        <include
+            android:layout_marginTop="@+dimen/quizBarCorrectAnswer_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/correctAnswerRoot"
+            layout="@layout/correct_answer" />
+        
+        <include
+            android:layout_marginTop="@+dimen/quizBarCorrectAnswer_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/incorrectAnswerRoot"
+            layout="@layout/incorrect_answer" />                
+            
+    </LinearLayout>
+        
+    <VideoView
+        android:layout_toRightOf="@+id/navBar"
+        android:layout_toLeftOf="@+id/quizbar"
+        android:id="@+id/myvideoview"
+        android:layout_marginTop = "@+dimen/videoFragmentVideo_top"
+        android:layout_width="@+dimen/videoFragmentVideo_width"
+        android:layout_height="wrap_content" />
+    
+</RelativeLayout>
+

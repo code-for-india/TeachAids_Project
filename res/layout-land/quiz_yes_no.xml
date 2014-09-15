@@ -13,19 +13,19 @@
         android:gravity="center"
         android:text=""
         android:textColor="#2b2e2e"
-        android:textSize="32sp" />
+        android:textSize="@+dimen/quizQuestionLabel_textsize" />
           
     <Button
     android:id="@+id/yesButton"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="@+dimen/quizButton_height"
     android:layout_marginBottom="2dp"
     android:text="Yes" />
 
     <Button
     android:id="@+id/noButton"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="@+dimen/quizButton_height"
     android:layout_marginBottom="5dp"
     android:text="No" />
     

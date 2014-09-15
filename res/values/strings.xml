@@ -11,5 +11,7 @@
     <string name="oklabel">OK</string>
     <string name="externalstorage_unavailable">The external storage location is unavailable.</string>
     <string name="unzip_progress_message">Preparing...</string>
+	<string name="oobe_experience_key">com.project.TeachAids.OOBE_KEY</string>
+	<string name="organization_key">com.project.TeachAids.ORG_KEY</string>
 	
 </resources>

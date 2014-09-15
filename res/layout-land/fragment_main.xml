@@ -3,133 +3,23 @@
    android:orientation="horizontal"
    android:layout_height="fill_parent"
    android:layout_width="fill_parent"
-   android:background="#2b2e2e"
+   android:background="#ffffff"
+   android:animateLayoutChanges="true"
    >
-   <RelativeLayout
-       android:id="@+id/navBar"
-       android:layout_alignParentLeft="true"
-       android:background="#e6e7e8"
-       android:orientation="vertical"
-       android:layout_width="200dp"
-       android:layout_height="fill_parent"
-       >
-       
-      <TextView
-        android:id="@+id/chapterLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop = "100dp"
-        android:layout_marginBottom = "10dip"
-        android:gravity="center"
-        android:text="Chapter 1 of 11"
-        android:textColor="#000000"
-        android:textSize="20sp" />
+   
+   <include
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:visibility="gone"
+           android:id="@+id/videoFragment"
+           layout="@layout/video_fragment" />
 
-      <TextView
-        android:id="@+id/videoTitleLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop = "6dip"
-        android:layout_marginBottom = "10dip"
-        android:layout_below="@id/chapterLabel"
-        android:gravity="center"
-        android:text="A Doctor's Visit"
-        android:textColor="#2b2e2e"
-        android:textSize="32sp" />
-      
-      <LinearLayout
-       android:orientation="horizontal"
-       android:layout_below="@id/videoTitleLabel"
-       android:layout_marginTop ="6dip"
-       android:layout_marginLeft = "40dp"
-       android:layout_marginRight = "40dp"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content">
-          <ImageView
-            android:id="@+id/skipprev"
-    		android:layout_width="30dip"
-    		android:layout_height="30dip"
-    		android:layout_marginTop ="10dip"
-    		android:src="@drawable/left_arrow"
-    		/>
-          <ImageView
-            android:id="@+id/playandpause"
-    		android:layout_width="50dip"
-    		android:layout_height="50dip"
-    		android:src="@drawable/pause"/>
-          <ImageView
-            android:id="@+id/skipnext"
-    		android:layout_width="30dip"
-    		android:layout_height="30dip"
-    		android:layout_marginTop ="10dip"
-    		android:src="@drawable/right_arrow"/>
-      </LinearLayout>
-      
-      <TextView
-        android:id="@+id/learnMoreTeachAids"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="10dp"
-        android:text="Learn More: www.teachaids.org"
-        android:textColor="#000000"
-        android:textSize="12sp" />
-            
-      <ImageView
-            android:layout_above="@+id/learnMoreTeachAids"
-            android:layout_marginTop="50dp"
-			android:layout_marginLeft="10dp"
-        	android:layout_marginRight="40dp"            
-    		android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:src="@drawable/teachaidslogo" />
-      
-   </RelativeLayout>
-
-	<LinearLayout
-	    android:layout_alignParentRight="true"
-	    android:id="@+id/quizbar"
-	    android:background="#e6e7e8"
-        android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_height="fill_parent">
-	    
-	    <include
-	        android:layout_marginTop="150dp"
-        	android:layout_width="match_parent"
-        	android:layout_height="wrap_content"
-        	android:visibility="gone"
-        	android:id="@+id/yesnoparent"
-        	layout="@layout/quiz_yes_no" />
-	    
-		<include
-	        android:layout_marginTop="200dp"
-        	android:layout_width="match_parent"
-        	android:layout_height="wrap_content"
-        	android:visibility="gone"
-        	android:id="@+id/correctAnswerRoot"
-        	layout="@layout/correct_answer" />
-		
-		<include
-	        android:layout_marginTop="200dp"
-        	android:layout_width="match_parent"
-        	android:layout_height="wrap_content"
-        	android:visibility="gone"
-        	android:id="@+id/incorrectAnswerRoot"
-        	layout="@layout/incorrect_answer" />			    
-	    	
-	</LinearLayout>
-	   	
-	<VideoView
-	   	android:layout_toRightOf="@+id/navBar"
-	   	android:layout_toLeftOf="@+id/quizbar"
-	   	android:id="@+id/myvideoview"
-	   	android:layout_marginTop = "50dp"
-	   	android:layout_width="200dp"
-	    android:layout_height="wrap_content" />
-	
+   <include
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:visibility="visible"
+           android:id="@+id/chapterFragment"
+           layout="@layout/chapter_select_fragment" />
+   
 </RelativeLayout>
 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/chapterFragmentIndexText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@+dimen/chapterFragmentIndex_top"
+        android:textSize="@+dimen/chapterFragmentIndex_size"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/chapterFragmentTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@+dimen/chapterFragmentTitle_top"
+        android:textSize="@+dimen/chapterFragmentTitle_size"
+        android:text="" />
+
+    <Button
+        android:id="@+id/chapterFragmentPlayButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@+dimen/chapterFragmentPlay_top"
+        android:width="@+dimen/chapterFragmentPlay_width"
+        android:textSize="@+dimen/chapterFragmentPlay_size"
+        android:text="Play &#x25b6;" />
+
+</LinearLayout>

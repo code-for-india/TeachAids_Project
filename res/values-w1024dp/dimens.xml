@@ -3,33 +3,96 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     
-    <dimen name="teachAidsLogoContainer_left">140dp</dimen>
-    <dimen name="genderTeachAids_top">300dp</dimen>
-    <dimen name="genderTeachAids_left">0dp</dimen>
-    <dimen name="genderTeachAids_right">0dp</dimen>
-    <dimen name="genderTeachAids_width">200dp</dimen>
-    <dimen name="genderTeachAids_height">200dp</dimen>
-    <dimen name="genderTeachAidsUrl_top">5dp</dimen>
-    <dimen name="genderTeachAidsUrl_left">10dp</dimen>
-    <dimen name="genderTeachAidsUrl_bottom">20dp</dimen>
-    <dimen name="genderTeachAidsUrl_right">10dp</dimen>
-    <dimen name="genderTeachAidsUrl_textsize">12sp</dimen>
-    <dimen name="genderRightContainer_left">120dp</dimen>
-    <dimen name="genderSelectText_top">15dp</dimen>
+    <!-- start_view.xml -->
+    <dimen name="startTeachAids_top">320dp</dimen>
+    <dimen name="startTeachAids_left">250dp</dimen>
+    <dimen name="startTeachAidsLogoHeight">40dp</dimen>
+    <dimen name="startLanguageList_top">100dp</dimen>
+    <dimen name="startLanguageList_right">200dp</dimen>
+    <dimen name="startLanguageTextSize">40dp</dimen>
+    
+    <!-- gender_view.xml -->    
+    <dimen name="genderRightContainer_left">350dp</dimen>
+    <dimen name="genderSelectText_top">150dp</dimen>
     <dimen name="genderSelectText_bottom">10dp</dimen>
-    <dimen name="genderSelectText_textsize">24sp</dimen>
-    <dimen name="gender_male_button_left">-10dip</dimen>
-    <dimen name="gender_male_button_bottom">5dip</dimen>
-    <dimen name="gender_male_button_width">450dp</dimen>
-    <dimen name="maleText_top">-5dp</dimen>
-    <dimen name="maleText_bottom">10dp</dimen>
+    <dimen name="genderSelectText_textsize">42sp</dimen>
+    <dimen name="gender_male_button_left">0dip</dimen>
+    <dimen name="gender_male_button_bottom">25dip</dimen>
+    <dimen name="gender_male_button_width">200dp</dimen>
+    <dimen name="maleText_top">-25dp</dimen>
+    <dimen name="maleText_bottom">80dp</dimen>
     <dimen name="maleText_textsize">24sp</dimen>
-    <dimen name="gender_female_button_top">25dip</dimen>
-	<dimen name="gender_female_button_left">1dip</dimen>
+    <dimen name="gender_female_button_top">0dip</dimen>
+	<dimen name="gender_female_button_left">10dip</dimen>
     <dimen name="gender_female_button_bottom">12dip</dimen>
-    <dimen name="gender_female_button_width">450dp</dimen>
-    <dimen name="femaleText_top">-5dp</dimen>
-    <dimen name="femaleText_bottom">10dp</dimen>
+    <dimen name="gender_female_button_width">200dp</dimen>
+    <dimen name="femaleText_top">-25dp</dimen>
+    <dimen name="femaleText_bottom">80dp</dimen>
     <dimen name="femaleText_textsize">24sp</dimen>    
+    
+    <!-- chapter_select_fragment -->
+    <dimen name="chapterFragmentIndex_top">300dp</dimen>
+    <dimen name="chapterFragmentIndex_size">24sp</dimen>
+    <dimen name="chapterFragmentTitle_top">5dp</dimen>
+    <dimen name="chapterFragmentTitle_size">36dp</dimen>
+    <dimen name="chapterFragmentPlay_top">10dp</dimen>
+    <dimen name="chapterFragmentPlay_width">130dp</dimen>
+    <dimen name="chapterFragmentPlay_size">32sp</dimen>
+    
+    <!-- video_fragment -->
+    <dimen name="videoFragmentVideo_top">50dp</dimen>
+    <dimen name="videoFragmentVideo_width">200dp</dimen>
+    
+    <!-- video_fragment navBar -->
+    <dimen name="navBar_width">300dp</dimen>
+    <dimen name="navBarChapterLabel_top">200dp</dimen>
+    <dimen name="navBarChapterLabel_bottom">10dip</dimen>
+    <dimen name="navBarChapterLabel_textsize">32sp</dimen>
+    <dimen name="navBarvideoTitleLabel_top">6dip</dimen>
+    <dimen name="navBarvideoTitleLabel_bottom">10dip</dimen>
+    <dimen name="navBarvideoTitleLabel_textsize">40sp</dimen>
+    <dimen name="navBarPlayControls_top">20dip</dimen>
+    <dimen name="navBarPlayControls_left">40dip</dimen>
+    <dimen name="navBarPlayControls_right">40dip</dimen>
+    <dimen name="navBarSkipButton_width">60dip</dimen>
+    <dimen name="navBarSkipButton_height">60dip</dimen>
+    <dimen name="navBarSkipButton_top">10dip</dimen>
+    <dimen name="navBarPauseButton_width">80dip</dimen>
+    <dimen name="navBarPauseButton_height">80dip</dimen>
+    <dimen name="navBarPauseButton_top">0dp</dimen>
+    <dimen name="navBarNextButton_width">60dip</dimen>
+    <dimen name="navBarNextButton_height">60dip</dimen>
+    <dimen name="navBarNextButton_top">10dip</dimen>
+    <dimen name="navBarTeachAidsLabel_top">5dp</dimen>
+    <dimen name="navBarTeachAidsLabel_bottom">20dp</dimen>
+    <dimen name="navBarTeachAidsLabel_textsize">12sp</dimen>
+    <dimen name="navBarTeachAidsLogo_top">50dp</dimen>
+    <dimen name="navBarTeachAidsLogo_left">10dp</dimen>
+    <dimen name="navBarTeachAidsLogo_right">40dp</dimen>
+    
+    <!-- video_fragment quizBar -->
+    <dimen name="quizBarQuizLabel_top">40dp</dimen>
+    <dimen name="quizBarCorrectAnswer_top">20dp</dimen>
+    
+    <!-- quiz_yes_no fragment -->
+    <dimen name="quizQuestionLabel_textsize">22sp</dimen>
+    <dimen name="quizButton_height">40dp</dimen>
+    
+    <!-- in/correct_answer fragment -->
+    <dimen name="answerFragment_left">20dp</dimen>
+    <dimen name="answerFragment_right">20dp</dimen>
+    <dimen name="correctCheck_width">30dip</dimen>
+    <dimen name="correctCheck_height">30dip</dimen>
+    <dimen name="incorrectCheck_width">30dip</dimen>
+    <dimen name="incorrectCheck_height">30dip</dimen>
+    <dimen name="answerMainLabel_left">5dip</dimen>
+    <dimen name="answerMainLabel_bottom">10dip</dimen>
+    <dimen name="answerMainLabel_textsize">24sp</dimen>
+    <dimen name="answerSecondLabel_left">20dp</dimen>
+    <dimen name="answerSecondLabel_right">20dp</dimen>
+    <dimen name="answerSecondLabel_top">5dip</dimen>
+    <dimen name="answerSecondLabel_bottom">10dip</dimen>
+    <dimen name="answerSecondLabel_textsize">14sp</dimen>
+    <dimen name="answerContinueButton_height">40dp</dimen>
     
 </resources>

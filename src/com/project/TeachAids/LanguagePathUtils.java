@@ -3,6 +3,7 @@ package com.project.TeachAids;
 import java.io.File;
 
 import android.content.Context;
+import android.os.Environment;
 
 public class LanguagePathUtils {
 
@@ -48,7 +49,11 @@ public class LanguagePathUtils {
 			}
 		}
 		
-		return new File(context.getExternalFilesDir(null), filename);
+		File externalDir = context.getExternalFilesDir(null);
+		if (externalDir == null) {
+		    externalDir = new File(Environment.getExternalStorageDirectory(), "TeachAids");
+		}
+		return externalDir != null ? new File(externalDir, filename) : null;
 	}
 	
 	public static File getLanguagePackFolderPath(Context context, Language lang) {
@@ -68,6 +73,10 @@ public class LanguagePathUtils {
 			}
 		}
 		
-		return new File(context.getExternalFilesDir(null), filename);
+		File externalDir = context.getExternalFilesDir(null);
+        if (externalDir == null) {
+            externalDir = new File(Environment.getExternalStorageDirectory(), "TeachAids");
+        }
+        return externalDir != null ? new File(externalDir, filename) : null;
 	}
 }

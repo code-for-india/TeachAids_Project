@@ -15,7 +15,10 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,7 +32,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.MediaController;
+import android.widget.TextView;
 import android.widget.VideoView;
 import android.os.Build;
 
@@ -85,36 +90,11 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 	@Override
 	public void onLanguageTapped(Language lang) {
 		mCurrentLanguage = lang;
-		
-		File localPathInternal = LanguagePathUtils.getLanguagePackFolderPath(this, mCurrentLanguage);
-		File downloadPath = LanguagePathUtils.getLanguagePackDownloadPath(this, lang);
-		if (localPathInternal.exists()) {
-		    if (downloadPath.exists()) {
-		        extractLanguagePackAndLaunch(downloadPath, localPathInternal);
-		    } else {
-	            // we have already downloaded this language pack. done
-	            launchGenderSelectScreen();		        
-		    }
+		if (!oobeHasRun()) {
+		    setOobeHasRun();
+		    showOrganizationPopup();
 		} else {
-			// we currently download all media files to the private storage directory within external storage
-			// if the external storage medium is not available, display an error.
-			if (!externalStorageAvailable()) {
-				UIUtils.showMessageBox(this, this.getResources().getString(R.string.error_title), 
-				                       this.getResources().getString(R.string.externalstorage_unavailable));
-				return;
-			}
-
-			mCurrentDownloadUri = LanguagePathUtils.getLanguagePackUrl(lang);
-			if (mDownloadManager.triggerDownload(mCurrentDownloadUri, downloadPath.getPath())) {
-				startDownloadProgressTimer();
-			} else {
-				if (downloadPath.exists()) {
-				    extractLanguagePackAndLaunch(downloadPath, localPathInternal);
-				} else {
-					// This would not make sense as the language does not exist so a download has to be triggered.
-					Log.e(TAG, "Unexpected: download not triggered for language: " + lang);
-				}
-			}
+		    onLanguageTappedInternal(lang);
 		}
 	}
 	
@@ -208,6 +188,108 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 		ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
 		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 		ft.commit();
+	}
+	
+	private void onLanguageTappedInternal(Language lang) {
+	    File localPathInternal = LanguagePathUtils.getLanguagePackFolderPath(this, mCurrentLanguage);
+        File downloadPath = LanguagePathUtils.getLanguagePackDownloadPath(this, lang);
+        if ((localPathInternal == null) || (downloadPath == null)) {
+            UIUtils.showMessageBox(this, this.getResources().getString(R.string.error_title), 
+                    this.getResources().getString(R.string.externalstorage_unavailable));
+            return;
+        }
+        
+        if (localPathInternal.exists()) {
+            if (downloadPath.exists()) {
+                extractLanguagePackAndLaunch(downloadPath, localPathInternal);
+            } else {
+                // we have already downloaded this language pack. done
+                launchGenderSelectScreen();             
+            }
+        } else {
+            // we currently download all media files to the private storage directory within external storage
+            // if the external storage medium is not available, display an error.
+            if (!externalStorageAvailable()) {
+                UIUtils.showMessageBox(this, this.getResources().getString(R.string.error_title), 
+                                       this.getResources().getString(R.string.externalstorage_unavailable));
+                return;
+            }
+
+            mCurrentDownloadUri = LanguagePathUtils.getLanguagePackUrl(lang);
+            if (mDownloadManager.triggerDownload(mCurrentDownloadUri, downloadPath.getPath())) {
+                startDownloadProgressTimer();
+            } else {
+                if (downloadPath.exists()) {
+                    extractLanguagePackAndLaunch(downloadPath, localPathInternal);
+                } else {
+                    // This would not make sense as the language does not exist so a download has to be triggered.
+                    Log.e(TAG, "Unexpected: download not triggered for language: " + lang);
+                }
+            }
+        }	    
+	}
+	
+    private boolean oobeHasRun() {
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.oobe_experience_key), Context.MODE_PRIVATE);
+        return sharedPref.getBoolean("ooberun", false);
+    }
+
+    private void setOobeHasRun() {
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.oobe_experience_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("ooberun", true);
+        editor.commit();
+    }
+    
+    private String getOrganizationName() {
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.organization_key), Context.MODE_PRIVATE);
+        return sharedPref.getString("orgname", null);
+    }
+    
+    private void setOrganizationName(String name) {
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.organization_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("orgname", name);
+        editor.commit();
+    }
+	
+	private void showOrganizationPopup() {
+	    // get prompts.xml view
+        LayoutInflater li = LayoutInflater.from(this);
+        
+        View promptsView = li.inflate(R.layout.organization_prompt, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptsView);
+
+        TextUtil.SetStandardTextStyle((TextView) promptsView.findViewById(R.id.mainText), Color.parseColor("#808285"));
+        TextUtil.SetThinTextStyle((TextView) promptsView.findViewById(R.id.subText), Color.parseColor("#2b2e2e"));
+        
+        final EditText userInput = (EditText) promptsView
+                .findViewById(R.id.editTextDialogUserInput);
+
+        // set dialog message
+        alertDialogBuilder
+            .setCancelable(false)
+            .setPositiveButton("Submit",
+              new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int id) {
+                    Log.d(TAG, userInput.getText().toString());
+                    setOrganizationName(userInput.getText().toString());
+                    onLanguageTappedInternal(mCurrentLanguage);
+                }
+              })
+            .setNegativeButton("Skip",
+              new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int id) {
+                    dialog.cancel();
+                    onLanguageTappedInternal(mCurrentLanguage);
+                }
+              });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+        TextUtil.SetStandardTextStyle(alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE), Color.parseColor("#808285"));
+        TextUtil.SetStandardTextStyle(alertDialog.getButton(AlertDialog.BUTTON_POSITIVE), Color.parseColor("#808285"));
 	}
 	
 	private void extractLanguagePackAndLaunch(File downloadPath, File localPath) {

@@ -5,26 +5,26 @@
     android:orientation="vertical" >
     
     <LinearLayout
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginLeft="@+dimen/answerFragment_left"
+        android:layout_marginRight="@+dimen/answerFragment_right"
         android:layout_width="match_parent"
     	android:layout_height="wrap_content"
     	android:orientation="horizontal"
         >
         
        <ImageView
-    		android:layout_width="30dip"
-    		android:layout_height="30dip"
+    		android:layout_width="@+dimen/incorrectCheck_width"
+    		android:layout_height="@+dimen/incorrectCheck_height"
     		android:src="@drawable/x"/>
        
              <TextView
         		android:id="@+id/incorrectLabel"
         		android:layout_width="wrap_content"
         		android:layout_height="wrap_content"
-        		android:layout_marginLeft = "5dip"
-        		android:layout_marginBottom = "10dip"	
+        		android:layout_marginLeft = "@+dimen/answerMainLabel_left"
+        		android:layout_marginBottom = "@+dimen/answerMainLabel_bottom"	
         		android:text="Incorrect!"
-        		android:textSize="24sp" />
+        		android:textSize="@+dimen/answerMainLabel_textsize" />
                   
     </LinearLayout>
     
@@ -32,18 +32,18 @@
   		android:id="@+id/incorrectLabel2"
   		android:layout_width="wrap_content"
   		android:layout_height="wrap_content"
-  		android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-  		android:layout_marginTop = "5dip"
-  		android:layout_marginBottom = "10dip"
+        android:layout_marginLeft="@+dimen/answerSecondLabel_left"
+        android:layout_marginRight="@+dimen/answerSecondLabel_right"
+        android:layout_marginTop = "@+dimen/answerSecondLabel_top"
+        android:layout_marginBottom = "@+dimen/answerSecondLabel_bottom"
   		android:gravity="center"	
   		android:text="The correct answer was 'Yes'"
-  		android:textSize="14sp" />
+  		android:textSize="@+dimen/answerSecondLabel_textsize" />
        
 	<Button
     android:id="@+id/incorrectContinueButton"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="@+dimen/answerContinueButton_height"
     android:layout_marginBottom="5dp"
     android:text="Continue" />       
     

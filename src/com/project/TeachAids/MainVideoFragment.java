@@ -13,6 +13,8 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.app.Fragment;
 import android.graphics.Color;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,6 +48,11 @@ public class MainVideoFragment extends Fragment {
 	private List<VideoHolder> mVideoList;
 	
 	// controls
+	private View mVideoFragment;
+	private View mChapterSelectFragment;
+	private TextView mChapterFragmentLabel;
+	private TextView mChapterFragmentTitleLabel;
+	private Button mChapterFragmentPlayButton;
 	private TextView mChapterLabel;
     private TextView mVideoTitleLabel;
     private View mNavBar;
@@ -62,7 +69,7 @@ public class MainVideoFragment extends Fragment {
     private Button mIncorrectConfirmButton;
     private TextView mQuizTextLabel;
     
-	private final int TIMER_PERIOD = 200;
+	private final int TIMER_PERIOD = 60;
 	
 	public interface VideoScreenListener {
 	    public void onMainVideoFinished();
@@ -90,48 +97,41 @@ public class MainVideoFragment extends Fragment {
 	    }
 		
 		final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+		mVideoFragment = rootView.findViewById(R.id.videoFragment);
+		mChapterSelectFragment = rootView.findViewById(R.id.chapterFragment);
 		
-		mCorrectView = rootView.findViewById(R.id.correctAnswerRoot);
-		mCorrectConfirmButton = (Button)mCorrectView.findViewById(R.id.correctContinueButton);
-		initCorrectView();
-		
-		mIncorrectView = rootView.findViewById(R.id.incorrectAnswerRoot);
-		mIncorrectConfirmButton = (Button)mIncorrectView.findViewById(R.id.incorrectContinueButton);
-		initIncorrectView();		
-		
-		mChapterLabel = (TextView)rootView.findViewById(R.id.chapterLabel);
-		TextUtil.SetThinTextStyle(mChapterLabel, Color.parseColor("#2b2e2e"));
-		mVideoTitleLabel = (TextView)rootView.findViewById(R.id.videoTitleLabel);
-		TextUtil.SetThinTextStyle(mVideoTitleLabel, Color.parseColor("#c1272d"));
-		TextUtil.SetThinTextStyle((TextView)rootView.findViewById(R.id.learnMoreTeachAids), Color.parseColor("#3981ca"));
-		
-		mPlayPauseView = (ImageView)rootView.findViewById(R.id.playandpause);
-		
-		mNavBar = rootView.findViewById(R.id.navBar);
-		mQuizBar = rootView.findViewById(R.id.quizbar);
-		mYesNoParent = rootView.findViewById(R.id.yesnoparent);
-		mQuizTextLabel = (TextView)mYesNoParent.findViewById(R.id.quizQuestionLabel);
-		TextUtil.SetThinTextStyle(mQuizTextLabel, Color.parseColor("#3981ca"));
-		mYesButton = (Button)rootView.findViewById(R.id.yesButton);
-		mNoButton = (Button)rootView.findViewById(R.id.noButton);
-		
-		final VideoView myVideoView = (VideoView)rootView.findViewById(R.id.myvideoview);
-		mVideoView = myVideoView;
-		myVideoView.setVideoURI(Uri.parse(mVideoList.get(mCurrentVideoIndex).getPath()));
-		myVideoView.start();
-		mPlaying = true;
-		startTimer();
+		mVideoView = (VideoView)rootView.findViewById(R.id.myvideoview);
+        mVideoView.setVideoURI(Uri.parse(mVideoList.get(mCurrentVideoIndex).getPath()));
+        
+		initChapterFragment();
+		initVideoFragment(rootView);
 		
 		setChapterLabelText();
 		setVideoTitleText();
 		
 		final MainVideoFragment self = this;
-		
 		rootView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 			}
 		});
+		
+		mVideoView.setOnCompletionListener(new OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                self.skipNext();
+            }
+		});
+		
+		mChapterFragmentPlayButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mChapterSelectFragment.setVisibility(View.GONE);
+                mVideoFragment.setVisibility(View.VISIBLE);
+                mVideoView.setVideoURI(Uri.parse(mVideoList.get(mCurrentVideoIndex).getPath()));
+                playVideo();
+            }
+        });
 		
 		mYesButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -196,42 +196,14 @@ public class MainVideoFragment extends Fragment {
 		rootView.findViewById(R.id.skipprev).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (mPopup == null) {
-					self.mCurrentVideoIndex--;
-					if (self.mCurrentVideoIndex < 0) {
-						self.mCurrentVideoIndex = 0;
-					}
-					setChapterLabelText();
-					setVideoTitleText();
-					myVideoView.setVideoURI(Uri.parse(mVideoList.get(mCurrentVideoIndex).getPath()));
-					myVideoView.requestFocus();
-					myVideoView.start();
-					mPlaying = true;
-					startTimer();
-				}
+			    self.skipPrevious();
 			}
 		});
 		
 		rootView.findViewById(R.id.skipnext).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (mPopup == null) {
-					self.mCurrentVideoIndex++;
-					if (self.mCurrentVideoIndex >= self.mVideoList.size()) {
-						mCurrentVideoIndex = self.mVideoList.size() - 1;
-						pauseVideo();
-						mParent.onMainVideoFinished();
-					}
-					else {
-						setChapterLabelText();
-						setVideoTitleText();
-						myVideoView.setVideoURI(Uri.parse(mVideoList.get(mCurrentVideoIndex).getPath()));
-						myVideoView.requestFocus();
-						myVideoView.start();
-						mPlaying = true;
-						startTimer();
-					}
-				}
+				self.skipNext();
 			}
 		});
 		
@@ -313,6 +285,42 @@ public class MainVideoFragment extends Fragment {
 		}
 	}
 	
+	private void initChapterFragment() {
+        mChapterFragmentLabel = (TextView)mChapterSelectFragment.findViewById(R.id.chapterFragmentIndexText);
+        TextUtil.SetThinTextStyle(mChapterFragmentLabel, Color.parseColor("#2b2e2e"));
+        mChapterFragmentTitleLabel = (TextView)mChapterSelectFragment.findViewById(R.id.chapterFragmentTitle);
+        TextUtil.SetThinTextStyle(mChapterFragmentTitleLabel, Color.parseColor("#c52827"));
+        mChapterFragmentPlayButton = (Button)mChapterSelectFragment.findViewById(R.id.chapterFragmentPlayButton);
+        TextUtil.SetThinTextStyle(mChapterFragmentPlayButton, Color.parseColor("#ffffff"));
+        mChapterFragmentPlayButton.setBackgroundColor(Color.parseColor("#c52827"));     
+    }
+    
+    private void initVideoFragment(View rootView) {
+        mCorrectView = rootView.findViewById(R.id.correctAnswerRoot);
+        mCorrectConfirmButton = (Button)mCorrectView.findViewById(R.id.correctContinueButton);
+        initCorrectView();
+        
+        mIncorrectView = rootView.findViewById(R.id.incorrectAnswerRoot);
+        mIncorrectConfirmButton = (Button)mIncorrectView.findViewById(R.id.incorrectContinueButton);
+        initIncorrectView();        
+        
+        mChapterLabel = (TextView)rootView.findViewById(R.id.chapterLabel);
+        TextUtil.SetThinTextStyle(mChapterLabel, Color.parseColor("#2b2e2e"));
+        mVideoTitleLabel = (TextView)rootView.findViewById(R.id.videoTitleLabel);
+        TextUtil.SetThinTextStyle(mVideoTitleLabel, Color.parseColor("#c1272d"));
+        TextUtil.SetThinTextStyle((TextView)rootView.findViewById(R.id.learnMoreTeachAids), Color.parseColor("#3981ca"));
+        
+        mPlayPauseView = (ImageView)rootView.findViewById(R.id.playandpause);
+        
+        mNavBar = rootView.findViewById(R.id.navBar);
+        mQuizBar = rootView.findViewById(R.id.quizbar);
+        mYesNoParent = rootView.findViewById(R.id.yesnoparent);
+        mQuizTextLabel = (TextView)mYesNoParent.findViewById(R.id.quizQuestionLabel);
+        TextUtil.SetThinTextStyle(mQuizTextLabel, Color.parseColor("#3981ca"));
+        mYesButton = (Button)rootView.findViewById(R.id.yesButton);
+        mNoButton = (Button)rootView.findViewById(R.id.noButton);       
+    }
+    
 	private void initCorrectView() {
 		TextUtil.SetMediumTextStyle((TextView)mCorrectView.findViewById(R.id.correctLabel), Color.parseColor("#6dce7c"));
 		TextUtil.SetThinTextStyle((TextView)mCorrectView.findViewById(R.id.correctLabel2), Color.parseColor("#2b2e2e"));
@@ -325,13 +333,47 @@ public class MainVideoFragment extends Fragment {
 	
 	private void setChapterLabelText() {
 		String text = "Chapter " + (mCurrentVideoIndex+1) + " of " + mVideoList.size();
+		mChapterFragmentLabel.setText(text);
 		mChapterLabel.setText(text);
 	}
 	
 	private void setVideoTitleText() {
 		if (mCurrentVideoIndex < mVideoList.size()) {
-			mVideoTitleLabel.setText(mVideoList.get(mCurrentVideoIndex).getTitle());
+		    final String text = mVideoList.get(mCurrentVideoIndex).getTitle();
+		    mChapterFragmentTitleLabel.setText(text);
+			mVideoTitleLabel.setText(text);
 		}
+	}
+	
+	private void skipPrevious() {
+	    if (mPopup == null) {
+	        pauseVideo();
+            mCurrentVideoIndex--;
+            if (mCurrentVideoIndex < 0) {
+                mCurrentVideoIndex = 0;
+            }
+            setChapterLabelText();
+            setVideoTitleText();
+            mChapterSelectFragment.setVisibility(View.VISIBLE);
+            mVideoFragment.setVisibility(View.GONE);
+        }
+	}
+	
+	private void skipNext() {
+	    if (mPopup == null) {
+	        pauseVideo();
+            mCurrentVideoIndex++;
+            if (mCurrentVideoIndex >= mVideoList.size()) {
+                mCurrentVideoIndex = mVideoList.size() - 1;
+                mParent.onMainVideoFinished();
+            }
+            else {
+                setChapterLabelText();
+                setVideoTitleText();
+                mChapterSelectFragment.setVisibility(View.VISIBLE);
+                mVideoFragment.setVisibility(View.GONE);
+            }
+        }
 	}
 	
 	private void pauseVideo() {
@@ -346,6 +388,7 @@ public class MainVideoFragment extends Fragment {
 	
 	private void playVideo() {
 		if (mVideoView != null) {
+		    mVideoView.requestFocus();
 			mVideoView.start();
 			mPlaying = true;
 			mPlayPauseView.setImageResource(R.drawable.pause);
@@ -398,7 +441,7 @@ public class MainVideoFragment extends Fragment {
 	    mQuizBar.startAnimation(anim);
 	    
 	    final float scale = getActivity().getResources().getDisplayMetrics().density;
-		int width = (int) (200 * scale + 0.5f);;
+		int width = (int) (200 * scale + 0.5f);
 		ResizeWidthAnimation anim2 = new ResizeWidthAnimation(mNavBar, width);
 	    anim2.setDuration(500);
 	    mNavBar.startAnimation(anim2);	    
