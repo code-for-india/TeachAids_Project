@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.project.TeachAids.GenderScreenFragment.Gender;
 import com.project.TeachAids.LanguagePathUtils.Language;
 import com.project.TeachAids.UnzipUtil.UnzipFinishedListener;
@@ -76,6 +78,8 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 			ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
 			ft.commit();
 		}
+		
+		AnalyticsUtil.LogPageView(((TeachAidsApplication) getApplication()).getTracker(), "MainActivity");
 	}
 
 	@Override 
