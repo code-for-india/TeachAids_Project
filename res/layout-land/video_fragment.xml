@@ -124,8 +124,8 @@
             layout="@layout/incorrect_answer" />                
             
     </LinearLayout>
-        
-    <VideoView
+    
+    <com.project.TeachAids.CustomVideoView
         android:layout_toRightOf="@+id/navBar"
         android:layout_toLeftOf="@+id/quizbar"
         android:id="@+id/myvideoview"

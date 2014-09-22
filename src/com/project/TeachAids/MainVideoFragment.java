@@ -15,6 +15,7 @@ import android.app.Fragment;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,6 +45,8 @@ public class MainVideoFragment extends Fragment {
 	private Timer mTimer;
 	private Handler mHandler = new Handler();
 	private QuestionPoint mCurrentQp;
+	private int mCurrentAnswerTriggerEndPoint;
+	private int mCurrentQuestionFinishPoint;
 	private String mPath;
 	private List<VideoHolder> mVideoList;
 	
@@ -59,7 +62,7 @@ public class MainVideoFragment extends Fragment {
     private View mQuizBar;
     private View mCorrectView;
     private View mIncorrectView;
-    private VideoView mVideoView;
+    private CustomVideoView mVideoView;
     private ImageView mPlayPauseView;
     private PopupWindow mPopup;
     private View mYesNoParent;
@@ -100,8 +103,19 @@ public class MainVideoFragment extends Fragment {
 		mVideoFragment = rootView.findViewById(R.id.videoFragment);
 		mChapterSelectFragment = rootView.findViewById(R.id.chapterFragment);
 		
-		mVideoView = (VideoView)rootView.findViewById(R.id.myvideoview);
+		mVideoView = (CustomVideoView)rootView.findViewById(R.id.myvideoview);
         mVideoView.setVideoURI(Uri.parse(mVideoList.get(mCurrentVideoIndex).getPath()));
+        mVideoView.setOnSeekCompleteListener(new OnSeekCompleteListener() {
+            @Override
+            public void onSeekComplete(MediaPlayer mp) {
+                mVideoView.requestFocus();
+                mVideoView.start();
+                mPlaying = true;
+                mPlayPauseView.setImageResource(R.drawable.pause);
+                mPlayPauseView.invalidate();
+                startTimer();                
+            }
+        });
         
 		initChapterFragment();
 		initVideoFragment(rootView);
@@ -169,8 +183,6 @@ public class MainVideoFragment extends Fragment {
 						mCorrectView.setVisibility(View.GONE);
 						mIncorrectView.setVisibility(View.VISIBLE);
 					}
-					dismissPopup();
-					playVideo();
 				}
 			}
 		});
@@ -178,18 +190,39 @@ public class MainVideoFragment extends Fragment {
 		mCorrectConfirmButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				dismissSideBar();
-				dismissPopup();
-				playVideo();
+				boolean didSeek = false;
+				if (mCurrentQp != null) {
+				    if (mCurrentQp.getCorrectAnswerSeekPoint() > 0) {
+				        didSeek = true;
+				        mVideoView.seekTo(mCurrentQp.getCorrectAnswerSeekPoint());
+				    }
+				    mCurrentAnswerTriggerEndPoint = 0;
+				}
+                dismissSideBar();
+                dismissPopup();				
+				if (!didSeek) {
+				    playVideo();
+				}
 			}
 		});
 		
 		mIncorrectConfirmButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				dismissSideBar();
-				dismissPopup();
-				playVideo();
+				boolean didSeek = false;
+				if (mCurrentQp != null) {
+                    if (mCurrentQp.getIncorrectAnswerSeekPoint() > 0) {
+                        didSeek = true;
+                        mVideoView.seekTo(mCurrentQp.getIncorrectAnswerSeekPoint());
+                    }
+                    mCurrentAnswerTriggerEndPoint = mCurrentQp.getCorrectAnswerSeekPoint();
+                    mCurrentQuestionFinishPoint = mCurrentQp.getQuestionEndSeekPoint();
+                }
+                dismissSideBar();
+                dismissPopup();				
+				if (!didSeek) {
+                    playVideo();
+                }
 			}
 		});	
 		
@@ -229,25 +262,34 @@ public class MainVideoFragment extends Fragment {
 			if (mPlaying) {
 				if (mVideoView != null) {
 					int currentPosition = mVideoView.getCurrentPosition();
-					if (currentPosition > 0 && (mCurrentVideoIndex < mVideoList.size())) {
-						VideoHolder currentVideoHolder = mVideoList.get(mCurrentVideoIndex);
-						if (currentVideoHolder.getStopPoints() != null) {
-							for (QuestionPoint qp : currentVideoHolder.getStopPoints()) {
-								if (qp.questionActive() && (Math.abs(qp.getStopPoint() - currentPosition) < TIMER_PERIOD)) {
-									stopTimer();
-									pauseVideo();
-									mCurrentQp = qp;
-									mCurrentQp.setQuestionActive(false);
-									mYesNoParent.setVisibility(View.VISIBLE);
-									mCorrectView.setVisibility(View.GONE);
-									mIncorrectView.setVisibility(View.GONE);
-									mPopup = this.createPopup(qp.getQuestionText());
-									mQuizTextLabel.setText(qp.getQuestionText());
-									showPopup(mPopup);
-									break;
-								}
-							}
-						}
+					if (currentPosition > 0) {
+					    if (mCurrentAnswerTriggerEndPoint > 0) {
+					        if (Math.abs(mCurrentAnswerTriggerEndPoint - currentPosition) < TIMER_PERIOD) {
+					            mCurrentAnswerTriggerEndPoint = 0;
+					            pauseVideo();
+					            mVideoView.seekTo(mCurrentQuestionFinishPoint);
+					            playVideo();
+					        }
+					    } else if (mCurrentVideoIndex < mVideoList.size()) {
+    						VideoHolder currentVideoHolder = mVideoList.get(mCurrentVideoIndex);
+    						if (currentVideoHolder.getStopPoints() != null) {
+    							for (QuestionPoint qp : currentVideoHolder.getStopPoints()) {
+    								if (qp.questionActive() && (Math.abs(qp.getStopPoint() - currentPosition) < TIMER_PERIOD)) {
+    									stopTimer();
+    									pauseVideo();
+    									mCurrentQp = qp;
+    									mCurrentQp.setQuestionActive(false);
+    									mYesNoParent.setVisibility(View.VISIBLE);
+    									mCorrectView.setVisibility(View.GONE);
+    									mIncorrectView.setVisibility(View.GONE);
+    									mPopup = this.createPopup(qp.getQuestionText());
+    									mQuizTextLabel.setText(qp.getQuestionText());
+    									showPopup(mPopup);
+    									break;
+    								}
+    							}
+    						}
+					    }
 					}
 				}
 			} else {

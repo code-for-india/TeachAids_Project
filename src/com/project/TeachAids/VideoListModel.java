@@ -19,18 +19,21 @@ public class VideoListModel {
         private boolean mCorrectAnswerIsYes;
         private int mCorrectAnswerSeekPoint;
         private int mIncorrectAnswerSeekPoint;
+        private int mQuestionEndSeekPoint;
         private boolean mQuestionActive = true;
                 
         private QuestionPoint(String questionText, 
                              int questionStopPoint,
                              boolean correctAnswerIsYes,
                              int correctAnswerSeekPoint,
-                             int incorrectAnswerSeekPoint) {
+                             int incorrectAnswerSeekPoint,
+                             int questionEndSeekPoint) {
             mQuestionText = questionText;
             mQuestionStopPoint = questionStopPoint;
             mCorrectAnswerIsYes = correctAnswerIsYes;
             mCorrectAnswerSeekPoint = correctAnswerSeekPoint;
             mIncorrectAnswerSeekPoint = incorrectAnswerSeekPoint;
+            mQuestionEndSeekPoint = questionEndSeekPoint;
         }
         
         public String getQuestionText() {
@@ -51,6 +54,10 @@ public class VideoListModel {
 
         public int getIncorrectAnswerSeekPoint() {
             return mIncorrectAnswerSeekPoint;
+        }
+        
+        public int getQuestionEndSeekPoint() {
+            return mQuestionEndSeekPoint;
         }
 
         public boolean questionActive() {
@@ -143,10 +150,11 @@ public class VideoListModel {
             while ((dict = csvReader.readNextMap()) != null) {
                 String videoTitle = null, questionText = null;
                 int questionStopPoint = -1, correctAnswerSeekPoint = -1, incorrectAnswerSeekPoint = -1;
+                int questionEndSeekPoint = -1;
                 boolean correctAnswerIsYes = false;
                 
                 for (String key : dict.keySet()) {
-                    //Question text   Time of stop    If Right go to time If Wrong go to time Correct answer is Yes
+                    //Question text   Time of stop    If Right go to time If Wrong go to time Correct answer is Yes Time of Explanation Start
                     if (key.equalsIgnoreCase("Video Title")) {
                         videoTitle = dict.get(key);
                     }
@@ -161,6 +169,9 @@ public class VideoListModel {
                     }
                     if (key.equalsIgnoreCase("If Wrong go to time")) {
                         incorrectAnswerSeekPoint = Integer.parseInt(dict.get(key));
+                    }
+                    if (key.equalsIgnoreCase("Time of Explanation Start")) {
+                        questionEndSeekPoint = Integer.parseInt(dict.get(key));
                     }
                     if (key.equalsIgnoreCase("Correct answer is Yes")) {
                         String value = dict.get(key);
@@ -179,7 +190,8 @@ public class VideoListModel {
                                                                    questionStopPoint, 
                                                                    correctAnswerIsYes, 
                                                                    correctAnswerSeekPoint, 
-                                                                   incorrectAnswerSeekPoint));
+                                                                   incorrectAnswerSeekPoint,
+                                                                   questionEndSeekPoint));
                     }
                 }
             }
