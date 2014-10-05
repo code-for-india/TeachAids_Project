@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,6 +73,9 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 		mDownloadManager = new VideoDownloadManager(this, this);
 		
 		if (savedInstanceState == null) {
+		    onFinalScreenFinished();
+		}
+		{
 			mStartScreenFragment = new StartScreenFragment(this);
 			mGenderScreenFragment = new GenderScreenFragment(this);
 			FragmentTransaction ft = getFragmentManager().beginTransaction().add(R.id.container, mStartScreenFragment);
@@ -82,6 +86,18 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 		AnalyticsUtil.LogPageView(((TeachAidsApplication) getApplication()).getTracker(), "MainActivity");
 	}
 
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	    super.onSaveInstanceState(savedInstanceState);
+	}
+	
+	@Override
+	public void onStop() {
+	    PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+	    PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+	    wl.release();
+	}
+	
 	@Override 
 	public void onBackPressed() {
 		if (getFragmentManager().getBackStackEntryCount() == 0) {
@@ -104,6 +120,9 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 	
 	@Override
 	public void onGenderTapped(Gender gender) {
+	    PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+	    PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+	    wl.acquire();
 		mMainVideoFragment = new MainVideoFragment(this, new File(LanguagePathUtils.getLanguagePackFolderPath(this, mCurrentLanguage), 
 		                                                          gender == Gender.MALE ? "male" : "female").getPath());
 		FragmentTransaction ft = getFragmentManager().beginTransaction().replace(R.id.container, mMainVideoFragment);

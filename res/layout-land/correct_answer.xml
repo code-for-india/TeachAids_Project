@@ -5,39 +5,46 @@
     android:orientation="vertical" >
     
     <LinearLayout
-        android:layout_marginLeft="@+dimen/answerFragment_left"
-        android:layout_marginRight="@+dimen/answerFragment_right"
         android:layout_width="match_parent"
     	android:layout_height="wrap_content"
     	android:orientation="horizontal">
         
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1" />    
+                    
        <ImageView
-    		android:layout_width="@+dimen/correctCheck_width"
-    		android:layout_height="@+dimen/correctCheck_height"
-    		android:src="@drawable/checkmark"/>
+    	   android:layout_width="@+dimen/correctCheck_width"
+    	   android:layout_height="@+dimen/correctCheck_height"
+    	   android:src="@drawable/checkmark" />
        
-             <TextView
-        		android:id="@+id/correctLabel"
-        		android:layout_width="wrap_content"
-        		android:layout_height="wrap_content"
-        		android:layout_marginLeft = "@+dimen/answerMainLabel_left"
-        		android:layout_marginBottom = "@+dimen/answerMainLabel_bottom"
-        		android:text="Correct!"
-        		android:textSize="@+dimen/answerMainLabel_textsize" />
+        <TextView
+   		   android:id="@+id/correctLabel"
+   		   android:layout_width="wrap_content"
+   		   android:layout_height="wrap_content"
+   		   android:layout_marginLeft = "@+dimen/answerMainLabel_left"
+   		   android:layout_marginBottom = "@+dimen/answerMainLabel_bottom"
+   		   android:text="Correct!"
+   		   android:textSize="@+dimen/answerMainLabel_textsize" />
                   
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1" />        
     </LinearLayout>
     
     <TextView
-	android:id="@+id/correctLabel2"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:layout_marginLeft="@+dimen/answerSecondLabel_left"
-    android:layout_marginRight="@+dimen/answerSecondLabel_right"
-	android:layout_marginTop = "@+dimen/answerSecondLabel_top"
-	android:layout_marginBottom = "@+dimen/answerSecondLabel_bottom"
-	android:gravity="center"	
-	android:text="The correct answer was 'Yes'"
-	android:textSize="@+dimen/answerSecondLabel_textsize" />
+	   android:id="@+id/correctLabel_answer"
+	   android:layout_width="wrap_content"
+	   android:layout_height="wrap_content"
+	   android:layout_marginTop = "@+dimen/answerSecondLabel_top"
+	   android:layout_marginBottom = "@+dimen/answerSecondLabel_bottom"
+	   android:layout_gravity="center"	
+	   android:text="The correct answer was 'Yes'"
+	   android:textSize="@+dimen/answerSecondLabel_textsize" />
     
     <Button
     android:id="@+id/correctContinueButton"

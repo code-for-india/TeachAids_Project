@@ -1,129 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
    android:orientation="horizontal"
    android:layout_height="fill_parent"
    android:layout_width="fill_parent"
-   android:background="#ffffff"
-   >
-            
+   android:background="#ffffff">
+    
     <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" />
+        
+    <RelativeLayout
         android:id="@+id/startTeachAids"
-        android:orientation="vertical"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="@+dimen/startTeachAids_top"
-        android:layout_marginLeft="@+dimen/startTeachAids_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:orientation="vertical" >
 
 	      <ImageView
-	          android:layout_width="wrap_content"
-	          android:layout_height="@+dimen/startTeachAidsLogoHeight"
+	          android:layout_centerVertical="true"
+	          android:layout_width="match_parent"
+	          android:layout_height="wrap_content"
 	          android:adjustViewBounds="true"
 	          android:src="@drawable/teachaidslogo" />
-	
-	 		<TextView
-	        android:id="@+id/startTeachAidsUrl"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:text="www.teachaids.org"
-	        android:textColor="#000000"
-	        android:textSize="12sp" />
-	</LinearLayout>
+	 		
+	</RelativeLayout>
  		
- 		<ScrollView
- 		    android:layout_width="wrap_content"
- 		    android:layout_height="wrap_content"
- 		    android:layout_alignParentRight="true"
- 		    android:layout_marginRight="@+dimen/startLanguageList_right"
- 		    android:layout_marginTop="@+dimen/startLanguageList_top"
- 		    android:orientation="vertical"
- 		    android:scrollbars="none" >
- 		    
-			<LinearLayout
- 		    	android:orientation="vertical"    
- 		        android:layout_width="wrap_content"
-        		android:layout_height="wrap_content">
-        		
-					<ImageView
-					android:id="@+id/english_button"
-			        android:layout_marginBottom="5dip"            
-			    	android:layout_width="wrap_content"
-			    	android:layout_height="@+dimen/startLanguageTextSize"
-			    	android:src="@drawable/english" />
-					 
-					<ImageView
-				    android:id="@+id/axomia_button"
-				    android:layout_width="wrap_content"
-				    android:layout_height="@+dimen/startLanguageTextSize"
-				    android:layout_marginBottom="5dip"
-				    android:scrollbarAlwaysDrawVerticalTrack="false"
-				    android:src="@drawable/axomia" />
-                    
-                    <ImageView
-                    android:id="@+id/odia_button"                       
-                    android:layout_marginBottom="5dip"            
-                    android:layout_width="wrap_content"
-                    android:layout_height="@+dimen/startLanguageTextSize"
-                    android:src="@drawable/odia" /> 
-						        
-                    <ImageView
-                    android:id="@+id/telugu_button"     
-                    android:layout_marginBottom="5dip"            
-                    android:layout_width="wrap_content"
-                    android:layout_height="@+dimen/startLanguageTextSize"
-                    android:src="@drawable/teluga" />
-                    
-                    <ImageView
-                    android:id="@+id/setswana_button"
-                    android:layout_marginBottom="5dip"            
-                    android:layout_width="wrap_content"
-                    android:layout_height="@+dimen/startLanguageTextSize"
-                    android:src="@drawable/setswana" /> 
-                    
-                    <ImageView
-                    android:id="@+id/hindi_button"
-                    android:layout_marginBottom="5dip"            
-                    android:layout_width="wrap_content"
-                    android:layout_height="@+dimen/startLanguageTextSize"
-                    android:src="@drawable/hindi" />
-                    
-                    <ImageView
-                    android:id="@+id/spanish_button"
-                    android:layout_marginBottom="5dip"            
-                    android:layout_width="wrap_content"
-                    android:layout_height="@+dimen/startLanguageTextSize"
-                    android:src="@drawable/spanish" /> 
-                    
-                    <ImageView
-                    android:id="@+id/kannada_button"
-                    android:layout_marginBottom="5dip"            
-                    android:layout_width="wrap_content"
-                    android:layout_height="@+dimen/startLanguageTextSize"
-                    android:src="@drawable/kannada" />
-                    
-                    <ImageView
-                    android:id="@+id/swahili_button"
-                    android:layout_marginBottom="5dip"            
-                    android:layout_width="wrap_content"
-                    android:layout_height="@+dimen/startLanguageTextSize"
-                    android:src="@drawable/swahili" /> 
-                    
-                    <ImageView
-                    android:id="@+id/mandarin_button"
-                    android:layout_marginBottom="5dip"            
-                    android:layout_width="wrap_content"
-                    android:layout_height="@+dimen/startLanguageTextSize"
-                    android:src="@drawable/mandarin" />
-                    
-                    <ImageView
-                    android:id="@+id/tamil_button"
-                    android:layout_marginBottom="5dip"            
-                    android:layout_width="wrap_content"
-                    android:layout_height="@+dimen/startLanguageTextSize"
-                    android:src="@drawable/tamil" />
- 		    </LinearLayout>
- 		    
- 		</ScrollView>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" />
+    
+	<ScrollView
+	    android:layout_width="0dp"
+	    android:layout_weight="2"
+	    android:layout_height="fill_parent"
+	    android:orientation="vertical"
+	    android:scrollbars="none" >
+	    
+	   <LinearLayout
+	       android:layout_width="match_parent"
+	       android:layout_height="wrap_content"
+	       android:orientation="vertical"
+	       android:layout_gravity="center"
+           android:gravity="center">
+
+            <TextView
+               android:id="@+id/english_button"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:textSize="@+dimen/startLanguageTextSize"
+               android:layout_marginBottom="@+dimen/startLanguageTextPadding"
+               android:textColor="#aaaaaa"
+               android:text="English" />	       
+	       <TextView
+	           android:id="@+id/hindi_button"
+	           android:layout_width="match_parent"
+	           android:layout_height="wrap_content"
+	           android:textSize="@+dimen/startLanguageTextSize"
+               android:layout_marginBottom="@+dimen/startLanguageTextPadding"	           
+	           android:textColor="#aaaaaa"
+	           android:text="हिन्दी" />
+      		
+	       <!-- 
+			<ImageView
+			    android:id="@+id/english_button"
+			    android:gravity="left"
+			    android:layout_width="wrap_content"
+			    android:layout_height="@+dimen/startLanguageTextSize"
+			    android:layout_marginBottom="5dip"
+			    android:src="@drawable/english" />
+			 
+			<ImageView
+		    android:id="@+id/axomia_button"
+		    android:layout_width="wrap_content"
+		    android:layout_height="@+dimen/startLanguageTextSize"
+		    android:layout_marginBottom="5dip"
+		    android:scrollbarAlwaysDrawVerticalTrack="false"
+		    android:src="@drawable/axomia" />
+                  
+                  <ImageView
+                  android:id="@+id/odia_button"                       
+                  android:layout_marginBottom="5dip"            
+                  android:layout_width="wrap_content"
+                  android:layout_height="@+dimen/startLanguageTextSize"
+                  android:src="@drawable/odia" /> 
+				        
+                  <ImageView
+                  android:id="@+id/telugu_button"     
+                  android:layout_marginBottom="5dip"            
+                  android:layout_width="wrap_content"
+                  android:layout_height="@+dimen/startLanguageTextSize"
+                  android:src="@drawable/teluga" />
+                  
+                  <ImageView
+                  android:id="@+id/setswana_button"
+                  android:layout_marginBottom="5dip"            
+                  android:layout_width="wrap_content"
+                  android:layout_height="@+dimen/startLanguageTextSize"
+                  android:src="@drawable/setswana" /> 
+                  
+                  <ImageView
+                  android:id="@+id/hindi_button"
+                  android:layout_marginBottom="5dip"            
+                  android:layout_width="wrap_content"
+                  android:layout_height="@+dimen/startLanguageTextSize"
+                  android:src="@drawable/hindi" />
+                  
+                  <ImageView
+                  android:id="@+id/spanish_button"
+                  android:layout_marginBottom="5dip"            
+                  android:layout_width="wrap_content"
+                  android:layout_height="@+dimen/startLanguageTextSize"
+                  android:src="@drawable/spanish" /> 
+                  
+                  <ImageView
+                  android:id="@+id/kannada_button"
+                  android:layout_marginBottom="5dip"            
+                  android:layout_width="wrap_content"
+                  android:layout_height="@+dimen/startLanguageTextSize"
+                  android:src="@drawable/kannada" />
+                  
+                  <ImageView
+                  android:id="@+id/swahili_button"
+                  android:layout_marginBottom="5dip"            
+                  android:layout_width="wrap_content"
+                  android:layout_height="@+dimen/startLanguageTextSize"
+                  android:src="@drawable/swahili" /> 
+                  
+                  <ImageView
+                  android:id="@+id/mandarin_button"
+                  android:layout_marginBottom="5dip"            
+                  android:layout_width="wrap_content"
+                  android:layout_height="@+dimen/startLanguageTextSize"
+                  android:src="@drawable/mandarin" />
+                  
+                  <ImageView
+                  android:id="@+id/tamil_button"
+                  android:layout_marginBottom="5dip"            
+                  android:layout_width="wrap_content"
+                  android:layout_height="@+dimen/startLanguageTextSize"
+                  android:src="@drawable/tamil" />
+                  -->
+	    </LinearLayout>
+	    
+	</ScrollView>
        
-</RelativeLayout>
+</LinearLayout>
 

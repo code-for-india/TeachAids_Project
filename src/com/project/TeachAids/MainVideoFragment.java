@@ -1,5 +1,7 @@
 package com.project.TeachAids;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -61,7 +63,9 @@ public class MainVideoFragment extends Fragment {
     private View mNavBar;
     private View mQuizBar;
     private View mCorrectView;
+    private TextView mCorrectViewAnswer;
     private View mIncorrectView;
+    private TextView mIncorrectViewAnswer;
     private CustomVideoView mVideoView;
     private ImageView mPlayPauseView;
     private PopupWindow mPopup;
@@ -71,6 +75,7 @@ public class MainVideoFragment extends Fragment {
     private Button mCorrectConfirmButton;
     private Button mIncorrectConfirmButton;
     private TextView mQuizTextLabel;
+    private MediaPlayer mAudioPlayer;
     
 	private final int TIMER_PERIOD = 60;
 	
@@ -156,12 +161,16 @@ public class MainVideoFragment extends Fragment {
 						mYesNoParent.setVisibility(View.GONE);
 						mCorrectView.setVisibility(View.VISIBLE);
 						mIncorrectView.setVisibility(View.GONE);
+						mCorrectViewAnswer.setText("The correct answer was 'Yes.'");
+						playCorrectSound();
 					}
 					else {
 						mQuizBar.setVisibility(View.VISIBLE);
 						mYesNoParent.setVisibility(View.GONE);
 						mCorrectView.setVisibility(View.GONE);
 						mIncorrectView.setVisibility(View.VISIBLE);
+						mIncorrectViewAnswer.setText("The correct answer was 'No.'");
+						playIncorrectSound();
 					}
 				}
 			}
@@ -176,12 +185,16 @@ public class MainVideoFragment extends Fragment {
 						mYesNoParent.setVisibility(View.GONE);
 						mCorrectView.setVisibility(View.VISIBLE);
 						mIncorrectView.setVisibility(View.GONE);
+						mCorrectViewAnswer.setText("The correct answer was 'No.'");
+						playCorrectSound();
 					}
 					else {
 						mQuizBar.setVisibility(View.VISIBLE);
 						mYesNoParent.setVisibility(View.GONE);
 						mCorrectView.setVisibility(View.GONE);
 						mIncorrectView.setVisibility(View.VISIBLE);
+						mIncorrectViewAnswer.setText("The correct answer was 'Yes.'");
+						playIncorrectSound();
 					}
 				}
 			}
@@ -256,6 +269,62 @@ public class MainVideoFragment extends Fragment {
 		
 		return rootView;
 	}
+	
+	private void playCorrectSound() {
+	    mCorrectConfirmButton.setEnabled(false);
+	    if (mCurrentQp.getRightSoundClip() != null) {
+            String soundPath = new File(mPath, mCurrentQp.getRightSoundClip()).getPath();
+            mAudioPlayer = new MediaPlayer();
+            try {
+                mAudioPlayer.setDataSource(soundPath);
+                mAudioPlayer.setLooping(false);
+                mAudioPlayer.prepare();
+                mAudioPlayer.start(); 
+                mAudioPlayer.setOnCompletionListener(new OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mCorrectConfirmButton.setEnabled(true);
+                    }
+                });
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }	    
+	}
+	
+	private void playIncorrectSound() {
+	    mIncorrectConfirmButton.setEnabled(false);
+        if (mCurrentQp.getWrongSoundClip() != null) {
+            String soundPath = new File(mPath, mCurrentQp.getWrongSoundClip()).getPath();
+            mAudioPlayer = new MediaPlayer();
+            try {
+                mAudioPlayer.setDataSource(soundPath);
+                mAudioPlayer.setLooping(false);
+                mAudioPlayer.prepare();
+                mAudioPlayer.start(); 
+                mAudioPlayer.setOnCompletionListener(new OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mIncorrectConfirmButton.setEnabled(true);
+                    }
+                });                
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }       
+    }	
 	
 	private void onTimerTick() {
 		if (mTimerRunning) {
@@ -364,13 +433,15 @@ public class MainVideoFragment extends Fragment {
     }
     
 	private void initCorrectView() {
+	    mCorrectViewAnswer = (TextView)mCorrectView.findViewById(R.id.correctLabel_answer);
 		TextUtil.SetMediumTextStyle((TextView)mCorrectView.findViewById(R.id.correctLabel), Color.parseColor("#6dce7c"));
-		TextUtil.SetThinTextStyle((TextView)mCorrectView.findViewById(R.id.correctLabel2), Color.parseColor("#2b2e2e"));
+		TextUtil.SetThinTextStyle(mCorrectViewAnswer, Color.parseColor("#2b2e2e"));
 	}
 	
 	private void initIncorrectView() {
+	    mIncorrectViewAnswer = (TextView)mIncorrectView.findViewById(R.id.incorrectLabel_answer);
 		TextUtil.SetMediumTextStyle((TextView)mIncorrectView.findViewById(R.id.incorrectLabel), Color.parseColor("#c1272d"));
-		TextUtil.SetThinTextStyle((TextView)mIncorrectView.findViewById(R.id.incorrectLabel2), Color.parseColor("#2b2e2e"));		
+		TextUtil.SetThinTextStyle(mIncorrectViewAnswer, Color.parseColor("#2b2e2e"));		
 	}
 	
 	private void setChapterLabelText() {

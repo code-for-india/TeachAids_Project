@@ -21,19 +21,25 @@ public class VideoListModel {
         private int mIncorrectAnswerSeekPoint;
         private int mQuestionEndSeekPoint;
         private boolean mQuestionActive = true;
+        private String mRightSoundClip;
+        private String mWrongSoundClip;
                 
         private QuestionPoint(String questionText, 
                              int questionStopPoint,
                              boolean correctAnswerIsYes,
                              int correctAnswerSeekPoint,
                              int incorrectAnswerSeekPoint,
-                             int questionEndSeekPoint) {
+                             int questionEndSeekPoint,
+                             String rightSoundClip,
+                             String wrongSoundClip) {
             mQuestionText = questionText;
             mQuestionStopPoint = questionStopPoint;
             mCorrectAnswerIsYes = correctAnswerIsYes;
             mCorrectAnswerSeekPoint = correctAnswerSeekPoint;
             mIncorrectAnswerSeekPoint = incorrectAnswerSeekPoint;
             mQuestionEndSeekPoint = questionEndSeekPoint;
+            mRightSoundClip = rightSoundClip;
+            mWrongSoundClip = wrongSoundClip;
         }
         
         public String getQuestionText() {
@@ -66,6 +72,14 @@ public class VideoListModel {
 
         public void setQuestionActive(boolean questionActive) {
             mQuestionActive = questionActive;
+        }
+        
+        public String getRightSoundClip() { 
+            return mRightSoundClip; 
+        }
+        
+        public String getWrongSoundClip() { 
+            return mWrongSoundClip;
         }
     }
 
@@ -148,7 +162,7 @@ public class VideoListModel {
             CSVReader csvReader = new CSVReader(new FileReader(new File(path, questionListMetadataFileName).getPath()));
             Map<String, String> dict = null;
             while ((dict = csvReader.readNextMap()) != null) {
-                String videoTitle = null, questionText = null;
+                String videoTitle = null, questionText = null, rightSoundClip = null, wrongSoundClip = null;
                 int questionStopPoint = -1, correctAnswerSeekPoint = -1, incorrectAnswerSeekPoint = -1;
                 int questionEndSeekPoint = -1;
                 boolean correctAnswerIsYes = false;
@@ -181,6 +195,12 @@ public class VideoListModel {
                             correctAnswerIsYes = false;
                         }
                     }
+                    if (key.equalsIgnoreCase("If Right Play")) {
+                        rightSoundClip = dict.get(key);
+                    }
+                    if (key.equalsIgnoreCase("If Wrong Play")) {
+                        wrongSoundClip = dict.get(key);
+                    }
                 }
                 
                 if (videoTitle!= null && questionText != null) {
@@ -191,7 +211,9 @@ public class VideoListModel {
                                                                    correctAnswerIsYes, 
                                                                    correctAnswerSeekPoint, 
                                                                    incorrectAnswerSeekPoint,
-                                                                   questionEndSeekPoint));
+                                                                   questionEndSeekPoint,
+                                                                   rightSoundClip,
+                                                                   wrongSoundClip));
                     }
                 }
             }

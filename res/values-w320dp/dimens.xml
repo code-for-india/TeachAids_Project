@@ -4,12 +4,13 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     
     <!-- start_view.xml -->
-    <dimen name="startTeachAids_top">130dp</dimen>
+    <dimen name="startTeachAids_top">60dp</dimen>
     <dimen name="startTeachAids_left">50dp</dimen>
-    <dimen name="startTeachAidsLogoHeight">40dp</dimen>
+    <dimen name="startTeachAidsLogoWidth">100dp</dimen>
     <dimen name="startLanguageList_top">10dp</dimen>
     <dimen name="startLanguageList_right">100dp</dimen>
     <dimen name="startLanguageTextSize">40dp</dimen>
+    <dimen name="startLanguageTextPadding">10dip</dimen>    
     
     <!-- gender_view.xml -->    
     <dimen name="genderRightContainer_left">70dp</dimen>

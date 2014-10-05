@@ -21,11 +21,9 @@
         android:id="@+id/finalAidsPrevention"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop = "6dip"
-        android:layout_marginBottom = "10dip"
         android:layout_below="@id/finalCongrats"
         android:gravity="center"
-        android:text="Aids Prevention Begins With Us"
+        android:text="AIDS Prevention Begins With Us"
         android:textColor="#2b2e2e"
         android:textSize="50sp" />
           

@@ -6,10 +6,11 @@
     <!-- start_view.xml -->
     <dimen name="startTeachAids_top">130dp</dimen>
     <dimen name="startTeachAids_left">50dp</dimen>
-    <dimen name="startTeachAidsLogoHeight">40dp</dimen>
+    <dimen name="startTeachAidsLogoWidth">200dp</dimen>
     <dimen name="startLanguageList_top">10dp</dimen>
     <dimen name="startLanguageList_right">100dp</dimen>
     <dimen name="startLanguageTextSize">40dp</dimen>
+    <dimen name="startLanguageTextPadding">10dip</dimen>      
     
     <!-- gender_view.xml -->    
     <dimen name="genderRightContainer_left">70dp</dimen>
@@ -33,7 +34,7 @@
     <!-- chapter_select_fragment -->
     <dimen name="chapterFragmentIndex_top">80dp</dimen>
     <dimen name="chapterFragmentIndex_size">24sp</dimen>
-    <dimen name="chapterFragmentTitle_top">-10dp</dimen>
+    <dimen name="chapterFragmentTitle_top">10dp</dimen>
     <dimen name="chapterFragmentTitle_size">36dp</dimen>
     <dimen name="chapterFragmentPlay_top">10dp</dimen>
     <dimen name="chapterFragmentPlay_width">130dp</dimen>
@@ -50,7 +51,7 @@
     <dimen name="navBarChapterLabel_textsize">20sp</dimen>
     <dimen name="navBarvideoTitleLabel_top">6dip</dimen>
     <dimen name="navBarvideoTitleLabel_bottom">10dip</dimen>
-    <dimen name="navBarvideoTitleLabel_textsize">32sp</dimen>
+    <dimen name="navBarvideoTitleLabel_textsize">26sp</dimen>
     <dimen name="navBarPlayControls_top">6dip</dimen>
     <dimen name="navBarPlayControls_left">40dip</dimen>
     <dimen name="navBarPlayControls_right">40dip</dimen>

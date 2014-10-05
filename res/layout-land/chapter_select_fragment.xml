@@ -2,16 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:layout_gravity="center"
+    android:gravity="center">
 
     <TextView
         android:id="@+id/chapterFragmentIndexText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@+dimen/chapterFragmentIndex_top"
+        android:layout_gravity="center_vertical|center_horizontal"
         android:textSize="@+dimen/chapterFragmentIndex_size"
-        android:text="" />
+        android:text="Chapter 1 of 1" />
 
     <TextView
         android:id="@+id/chapterFragmentTitle"
@@ -21,16 +22,35 @@
         android:gravity="center_horizontal"
         android:layout_marginTop="@+dimen/chapterFragmentTitle_top"
         android:textSize="@+dimen/chapterFragmentTitle_size"
-        android:text="" />
+        android:text="Title" />
 
-    <Button
-        android:id="@+id/chapterFragmentPlayButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+    <LinearLayout 
+        android:orientation="horizontal"
         android:layout_marginTop="@+dimen/chapterFragmentPlay_top"
-        android:width="@+dimen/chapterFragmentPlay_width"
-        android:textSize="@+dimen/chapterFragmentPlay_size"
-        android:text="Play &#x25b6;" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+	    <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1.3" />
+	     
+	    <Button
+	        android:id="@+id/chapterFragmentPlayButton"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="center_horizontal"
+	        android:layout_weight="1"
+	        android:textSize="@+dimen/chapterFragmentPlay_size"
+	        android:text="Play &#x25b6;" />
+	    
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1.3" />
+             
+    </LinearLayout>
 
 </LinearLayout>

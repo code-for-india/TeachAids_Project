@@ -6,10 +6,11 @@
     <!-- start_view.xml -->
     <dimen name="startTeachAids_top">150dp</dimen>
     <dimen name="startTeachAids_left">90dp</dimen>
-    <dimen name="startTeachAidsLogoHeight">80dp</dimen>
+    <dimen name="startTeachAidsLogoWidth">240dp</dimen>
     <dimen name="startLanguageList_top">10dp</dimen>
     <dimen name="startLanguageList_right">100dp</dimen>
     <dimen name="startLanguageTextSize">40dp</dimen>
+    <dimen name="startLanguageTextPadding">10dip</dimen>    
     
     <!-- gender_view.xml -->    
     <dimen name="genderRightContainer_left">140dp</dimen>
@@ -33,7 +34,7 @@
     <!-- chapter_select_fragment -->
     <dimen name="chapterFragmentIndex_top">40dp</dimen>
     <dimen name="chapterFragmentIndex_size">24sp</dimen>
-    <dimen name="chapterFragmentTitle_top">20dp</dimen>
+    <dimen name="chapterFragmentTitle_top">10dp</dimen>
     <dimen name="chapterFragmentTitle_size">42dp</dimen>
     <dimen name="chapterFragmentPlay_top">10dp</dimen>
     <dimen name="chapterFragmentPlay_width">60dp</dimen>
