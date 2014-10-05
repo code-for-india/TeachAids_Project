@@ -65,7 +65,6 @@ public class GenderScreenFragment extends Fragment implements OnClickListener, O
                 }
             }
 		});
-		TextUtil.SetThinTextStyle((TextView)rootView.findViewById(R.id.startTeachAidsUrl), Color.parseColor("#3981ca"));
 		TextUtil.SetThinTextStyle((TextView)rootView.findViewById(R.id.genderSelectText), Color.parseColor("#2b2e2e"));
 		TextUtil.SetThinTextStyle((TextView)rootView.findViewById(R.id.maleText), Color.parseColor("#2b2e2e"));
 		TextUtil.SetThinTextStyle((TextView)rootView.findViewById(R.id.femaleText), Color.parseColor("#2b2e2e"));

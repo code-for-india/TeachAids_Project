@@ -419,7 +419,6 @@ public class MainVideoFragment extends Fragment {
         TextUtil.SetThinTextStyle(mChapterLabel, Color.parseColor("#2b2e2e"));
         mVideoTitleLabel = (TextView)rootView.findViewById(R.id.videoTitleLabel);
         TextUtil.SetThinTextStyle(mVideoTitleLabel, Color.parseColor("#c1272d"));
-        TextUtil.SetThinTextStyle((TextView)rootView.findViewById(R.id.learnMoreTeachAids), Color.parseColor("#3981ca"));
         
         mPlayPauseView = (ImageView)rootView.findViewById(R.id.playandpause);
         
