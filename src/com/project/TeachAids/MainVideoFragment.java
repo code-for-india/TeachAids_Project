@@ -2,14 +2,9 @@ package com.project.TeachAids;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import com.project.TeachAids.GenderScreenFragment.Gender;
-import com.project.TeachAids.VideoListModel.QuestionPoint;
-import com.project.TeachAids.VideoListModel.VideoHolder;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
@@ -27,14 +22,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.MediaController;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.VideoView;
+
+import com.project.TeachAids.VideoListModel.QuestionPoint;
+import com.project.TeachAids.VideoListModel.VideoHolder;
 
 @SuppressLint("ValidFragment")
 public class MainVideoFragment extends Fragment {
@@ -60,7 +56,6 @@ public class MainVideoFragment extends Fragment {
 	private Button mChapterFragmentPlayButton;
 	private TextView mChapterLabel;
     private TextView mVideoTitleLabel;
-    private View mNavBar;
     private View mQuizBar;
     private View mCorrectView;
     private TextView mCorrectViewAnswer;
@@ -138,7 +133,7 @@ public class MainVideoFragment extends Fragment {
 		mVideoView.setOnCompletionListener(new OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                self.skipNext();
+                self.skipNext(true /* show screen */);
             }
 		});
 		
@@ -249,7 +244,7 @@ public class MainVideoFragment extends Fragment {
 		rootView.findViewById(R.id.skipnext).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				self.skipNext();
+				self.skipNext(false /* show screen */);
 			}
 		});
 		
@@ -422,7 +417,6 @@ public class MainVideoFragment extends Fragment {
         
         mPlayPauseView = (ImageView)rootView.findViewById(R.id.playandpause);
         
-        mNavBar = rootView.findViewById(R.id.navBar);
         mQuizBar = rootView.findViewById(R.id.quizbar);
         mYesNoParent = rootView.findViewById(R.id.yesnoparent);
         mQuizTextLabel = (TextView)mYesNoParent.findViewById(R.id.quizQuestionLabel);
@@ -471,7 +465,7 @@ public class MainVideoFragment extends Fragment {
         }
 	}
 	
-	private void skipNext() {
+	private void skipNext(boolean showScreen) {
 	    if (mPopup == null) {
 	        pauseVideo();
             mCurrentVideoIndex++;
@@ -482,8 +476,13 @@ public class MainVideoFragment extends Fragment {
             else {
                 setChapterLabelText();
                 setVideoTitleText();
-                mChapterSelectFragment.setVisibility(View.VISIBLE);
-                mVideoFragment.setVisibility(View.GONE);
+                if (showScreen) {
+                    mChapterSelectFragment.setVisibility(View.VISIBLE);
+                    mVideoFragment.setVisibility(View.GONE);
+                } else {
+                    mVideoView.setVideoURI(Uri.parse(mVideoList.get(mCurrentVideoIndex).getPath()));
+                    playVideo();
+                }
             }
         }
 	}
@@ -528,15 +527,8 @@ public class MainVideoFragment extends Fragment {
 	}
 	
 	private void showPopup(PopupWindow popUp) {
-        final float scale = getActivity().getResources().getDisplayMetrics().density;
-		int width = (int) (200 * scale + 0.5f);
-		ResizeWidthAnimation anim = new ResizeWidthAnimation(mQuizBar, width);
-	    anim.setDuration(500);
-	    mQuizBar.startAnimation(anim);
-	    
-	    ResizeWidthAnimation anim2 = new ResizeWidthAnimation(mNavBar, 0);
-	    anim2.setDuration(500);
-	    mNavBar.startAnimation(anim2);
+	    mQuizBar.startAnimation(AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_in));
+	    mQuizBar.setVisibility(View.VISIBLE);
 	}
 	
 	private void dismissPopup() {
@@ -548,14 +540,7 @@ public class MainVideoFragment extends Fragment {
 	}
 	
 	private void dismissSideBar() {
-		ResizeWidthAnimation anim = new ResizeWidthAnimation(mQuizBar, 0);
-	    anim.setDuration(500);
-	    mQuizBar.startAnimation(anim);
-	    
-	    final float scale = getActivity().getResources().getDisplayMetrics().density;
-		int width = (int) (200 * scale + 0.5f);
-		ResizeWidthAnimation anim2 = new ResizeWidthAnimation(mNavBar, width);
-	    anim2.setDuration(500);
-	    mNavBar.startAnimation(anim2);	    
+	    mQuizBar.startAnimation(AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_out));
+	    mQuizBar.setVisibility(View.GONE);
 	}
 }

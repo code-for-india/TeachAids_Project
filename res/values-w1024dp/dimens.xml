@@ -10,7 +10,7 @@
     <dimen name="startLanguageList_top">100dp</dimen>
     <dimen name="startLanguageList_right">200dp</dimen>
     <dimen name="startLanguageTextSize">80dp</dimen>
-    <dimen name="startLanguageTextPadding">10dip</dimen>
+    <dimen name="startLanguageTextPadding">15dip</dimen>
     
     <!-- gender_view.xml -->    
     <dimen name="genderRightContainer_left">350dp</dimen>

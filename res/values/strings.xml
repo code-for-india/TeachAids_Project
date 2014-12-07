@@ -13,5 +13,5 @@
     <string name="unzip_progress_message">Preparing...</string>
 	<string name="oobe_experience_key">com.project.TeachAids.OOBE_KEY</string>
 	<string name="organization_key">com.project.TeachAids.ORG_KEY</string>
-	
+	<string name="hindi_language">हिन्दी</string>
 </resources>

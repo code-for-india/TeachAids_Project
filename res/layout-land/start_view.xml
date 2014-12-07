@@ -62,7 +62,7 @@
 	           android:textSize="@+dimen/startLanguageTextSize"
                android:layout_marginBottom="@+dimen/startLanguageTextPadding"	           
 	           android:textColor="#aaaaaa"
-	           android:text="हिन्दी" />
+	           android:text="@+string/hindi_language" />
       		
 	       <!-- 
 			<ImageView

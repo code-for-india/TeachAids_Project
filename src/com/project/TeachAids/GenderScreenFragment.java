@@ -19,7 +19,6 @@ import android.widget.TextView;
 @SuppressLint("ValidFragment")
 public class GenderScreenFragment extends Fragment implements OnClickListener, OnTouchListener {
 	private GenderScreenListener mParent;
-	private boolean mSetBounds;
 	
 	public enum Gender {
 		MALE,
@@ -43,28 +42,7 @@ public class GenderScreenFragment extends Fragment implements OnClickListener, O
 		final View rootView = inflater.inflate(R.layout.gender_view, container, false);
 		final View maleButton = rootView.findViewById(R.id.gender_male_button);
 		final View femaleButton = rootView.findViewById(R.id.gender_female_button);
-		rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (!mSetBounds) {
-                    mSetBounds = true;
-                    final int containerPadding = 40;
-                    int containerWidth = rootView.findViewById(R.id.genderRightContainer).getWidth();
-                    int maleWidth = maleButton.getWidth();
-                    int femaleWidth = femaleButton.getWidth();
-                    if (maleWidth != femaleWidth) {
-                        containerWidth -= containerPadding; // padding
-                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) maleButton.getLayoutParams();
-                        params.leftMargin += containerPadding / 2;
-                        params.width = containerWidth / 2;
-                        maleButton.setLayoutParams(params);
-                        params = (RelativeLayout.LayoutParams) femaleButton.getLayoutParams();
-                        params.width = containerWidth / 2;
-                        femaleButton.setLayoutParams(params);
-                    }
-                }
-            }
-		});
+		
 		TextUtil.SetThinTextStyle((TextView)rootView.findViewById(R.id.genderSelectText), Color.parseColor("#2b2e2e"));
 		TextUtil.SetThinTextStyle((TextView)rootView.findViewById(R.id.maleText), Color.parseColor("#2b2e2e"));
 		TextUtil.SetThinTextStyle((TextView)rootView.findViewById(R.id.femaleText), Color.parseColor("#2b2e2e"));

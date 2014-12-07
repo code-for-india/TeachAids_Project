@@ -94,17 +94,21 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 	
 	@Override
 	public void onStop() {
-	    if (mWakeLock != null) {
-	        mWakeLock.release();
-	    }
+	    try {
+    	    if (mWakeLock != null) {
+    	        mWakeLock.release();
+    	    }
+	    } catch (Exception e) {}
 	    super.onStop();
 	}
 	
 	@Override
     public void onPause() {
-	    if (mWakeLock != null) {
-            mWakeLock.release();
-        }
+	    try {
+            if (mWakeLock != null) {
+                mWakeLock.release();
+            }
+        } catch (Exception e) {}
         super.onPause();
     }	
 	
