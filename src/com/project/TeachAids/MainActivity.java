@@ -62,6 +62,7 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 	private String mCurrentDownloadUri;
 	private ProgressDialog mCurrentProgressDialog;
 	private UnzipUtil mUnzipUtil;
+	PowerManager.WakeLock mWakeLock;
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,10 +94,19 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 	
 	@Override
 	public void onStop() {
-	    PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-	    PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
-	    wl.release();
+	    if (mWakeLock != null) {
+	        mWakeLock.release();
+	    }
+	    super.onStop();
 	}
+	
+	@Override
+    public void onPause() {
+	    if (mWakeLock != null) {
+            mWakeLock.release();
+        }
+        super.onPause();
+    }	
 	
 	@Override 
 	public void onBackPressed() {
@@ -121,8 +131,8 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 	@Override
 	public void onGenderTapped(Gender gender) {
 	    PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-	    PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
-	    wl.acquire();
+	    mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+	    mWakeLock.acquire();
 		mMainVideoFragment = new MainVideoFragment(this, new File(LanguagePathUtils.getLanguagePackFolderPath(this, mCurrentLanguage), 
 		                                                          gender == Gender.MALE ? "male" : "female").getPath());
 		FragmentTransaction ft = getFragmentManager().beginTransaction().replace(R.id.container, mMainVideoFragment);
