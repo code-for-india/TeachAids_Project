@@ -5,41 +5,31 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.project.TeachAids.GenderScreenFragment.Gender;
-import com.project.TeachAids.LanguagePathUtils.Language;
-import com.project.TeachAids.UnzipUtil.UnzipFinishedListener;
-
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.PowerManager;
-import android.support.v4.app.FragmentManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.MediaController;
 import android.widget.TextView;
-import android.widget.VideoView;
-import android.os.Build;
+
+import com.project.TeachAids.GenderScreenFragment.Gender;
+import com.project.TeachAids.LanguagePathUtils.Language;
+import com.project.TeachAids.UnzipUtil.UnzipFinishedListener;
 
 public class MainActivity extends Activity implements StartScreenFragment.StartScreenListener, 
 													  GenderScreenFragment.GenderScreenListener,
@@ -67,6 +57,9 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Log.d("TeachAids", "Design resolution: " + getDeviceResolution());
+		Log.d("TeachAids", "Design heights: " + getDeviceDips());
 		
 	    this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
@@ -392,5 +385,36 @@ public class MainActivity extends Activity implements StartScreenFragment.StartS
 		
 	private boolean externalStorageAvailable() {
 		  return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+	}
+	
+	private String getDeviceResolution()
+    {
+        int density = getResources().getDisplayMetrics().densityDpi;
+        switch (density)
+        {
+            case DisplayMetrics.DENSITY_MEDIUM:
+                return "MDPI";
+            case DisplayMetrics.DENSITY_HIGH:
+                return "HDPI";
+            case DisplayMetrics.DENSITY_LOW:
+                return "LDPI";
+            case DisplayMetrics.DENSITY_XHIGH:
+                return "XHDPI";
+            case DisplayMetrics.DENSITY_TV:
+                return "TV";
+            case DisplayMetrics.DENSITY_XXHIGH:
+                return "XXHDPI";
+            case DisplayMetrics.DENSITY_XXXHIGH:
+                return "XXXHDPI";
+            default:
+                return "Unknown";
+        }
+    }
+	
+	private String getDeviceDips() {
+	    DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        return "Height: " + dpHeight + "dp. Width: " + dpWidth + "dp";
 	}
 }

@@ -15,17 +15,17 @@
     <!-- gender_view.xml -->    
     <dimen name="genderRightContainer_left">120dp</dimen>
     <dimen name="genderSelectText_top">15dp</dimen>
-    <dimen name="genderSelectText_bottom">10dp</dimen>
-    <dimen name="genderSelectText_textsize">24sp</dimen>
+    <dimen name="genderSelectText_bottom">40dp</dimen>
+    <dimen name="genderSelectText_textsize">50sp</dimen>
     <dimen name="gender_male_button_left">-10dip</dimen>
-    <dimen name="gender_male_button_bottom">5dip</dimen>
+    <dimen name="gender_male_button_bottom">55dip</dimen>
     <dimen name="gender_male_button_width">250dp</dimen>
     <dimen name="maleText_top">-5dp</dimen>
     <dimen name="maleText_bottom">10dp</dimen>
     <dimen name="maleText_textsize">24sp</dimen>
     <dimen name="gender_female_button_top">25dip</dimen>
 	<dimen name="gender_female_button_left">1dip</dimen>
-    <dimen name="gender_female_button_bottom">12dip</dimen>
+    <dimen name="gender_female_button_bottom">55dip</dimen>
     <dimen name="gender_female_button_width">250dp</dimen>
     <dimen name="femaleText_top">-5dp</dimen>
     <dimen name="femaleText_bottom">10dp</dimen>
